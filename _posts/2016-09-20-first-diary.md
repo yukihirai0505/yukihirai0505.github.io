@@ -21,6 +21,17 @@ print_hi('Tom')
 #=> prints 'Hi, Tom' to STDOUT.
 {% endhighlight %}
 
+{% highlight java %}
+public static void main(String args[]){
+  printHi("Yuki");
+  // => prints 'Hi, Yuki' to STDOUT.
+}
+
+public static void printHi(String name) {
+  System.out.println("Hi," + name);
+}
+{% endhighlight %}
+
 Jekyllで困ったら下記のページを見に行くようにしよう。
 
 Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
