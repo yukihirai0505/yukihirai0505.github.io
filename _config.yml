@@ -2,11 +2,10 @@ title: I'm already a developer
 email: yukihirai0505@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   Yuki Hirai
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://yukihirai0505.github.io" # the base hostname & protocol for your site
+baseurl: ""
+url: "https://yukihirai0505.github.io"
 twitter_username: yukihirai0505
 github_username:  yukihirai0505
 
-# Build settings
 markdown: kramdown
 theme: minima
