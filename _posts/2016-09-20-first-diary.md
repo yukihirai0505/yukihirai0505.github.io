@@ -13,6 +13,10 @@ Jekyllではじめてのブログ^^
 
 このシンタックスハイライト便利だなあ
 
+```
+echo "Hi Yuki!";
+```
+
 {% highlight ruby %}
 def print_hi(name)
   puts "Hi, #{name}"
