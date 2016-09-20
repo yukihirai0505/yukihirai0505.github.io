@@ -7,6 +7,8 @@ categories: Diary
 
 Jekyllではじめてのブログ^^
 
+![キャプション]({{site.baseurl}}/images/yukachi.jpg)
+
 `Hello Jekyll!`
 
 このシンタックスハイライト便利だなあ
