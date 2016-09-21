@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "さくらのVPSでサブドメインの設定"
-date:   2016-10-06 13:09:43 +0900
+date:   2016-10-07 13:09:43 +0900
 categories: Development
 ---
 
