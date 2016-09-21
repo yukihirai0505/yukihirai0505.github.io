@@ -7,7 +7,7 @@ categories: Development
 
 今回はGitのコミットメッセージについて記事にしてみます。
 
-[https://github.com/erlang/otp/wiki/Writing-good-commit-messages:title]
+[Writing good commit messages](https://github.com/erlang/otp/wiki/Writing-good-commit-messages)
 という記事があったので、自分なりに日本語に変換して理解しておきます。
 
 ## Writing good commit messages
