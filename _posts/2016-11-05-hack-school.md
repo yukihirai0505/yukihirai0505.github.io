@@ -72,7 +72,7 @@ IPアドレスからMACアドレスを導く仕組みがあれば良い。
 ざっくりな流れはTCPも同じだがその内容は異なる。
 
 - [TCPとUDPの比較](http://gihyo.jp/admin/serial/01/net_prac_tech/0007)
-- [ARP(Address Resolution Protocol)、RARP(Reverse ARP)]とは](http://www.infraexpert.com/study/tcpip2.html)
+- [ARP(Address Resolution Protocol)、RARP(Reverse ARP)とは](http://www.infraexpert.com/study/tcpip2.html)
 
 
 ## NIC
