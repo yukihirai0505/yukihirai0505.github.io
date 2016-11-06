@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "ハッカーの学校 実践編で出てきた用語一部抜粋"
-date:   2016-11-06 12:00:00 +0900
+date:   2016-11-02 12:00:00 +0900
 categories: Development
 ---
 
