@@ -17,7 +17,7 @@ categories: Development
 これは個人によって違うかもしれませんが、
 user uなどのようにテーブル名は省略して書いています。
 
-[https://gist.github.com/yukihirai0505/f2771898c7ad7bb6e9ff](https://gist.github.com/yukihirai0505/f2771898c7ad7bb6e9ff)
+{% gist yukihirai0505/f2771898c7ad7bb6e9ff %}
 
 といった具合です。
 こう書いておくと後から見返したりチューニングする時もすっきりしているので良いですね。
@@ -26,7 +26,7 @@ user uなどのようにテーブル名は省略して書いています。
 
 このCASE式も結構使います、条件によって表示するものを変えたいとかいった場合に使用したりします。
 
-[https://gist.github.com/yukihirai0505/695025bc2df53ff2e213](https://gist.github.com/yukihirai0505/695025bc2df53ff2e213)
+{% gist yukihirai0505/695025bc2df53ff2e213 %}
 
 といった書き方もできます。
 
@@ -41,13 +41,14 @@ user uなどのようにテーブル名は省略して書いています。
 
 ### 部分置換
 
-[https://gist.github.com/yukihirai0505/749deecc8fb6f9909817](https://gist.github.com/yukihirai0505/749deecc8fb6f9909817)
+{% gist yukihirai0505/749deecc8fb6f9909817 %}
 
 ## チューニング編
 
 最適化するべきクエリはスロークエリログやクエリアナライザで見付けられます。
 ここのブログで紹介されてるやり方で、
 スロークエリの設定が確認できます。
+
 [Mysql slow queryの設定と解析方法](http://d.hatena.ne.jp/masayuki14/20120704/1341360260)
 
 MySQLをbrewで入れている場合は
@@ -80,11 +81,11 @@ indexまたはALLの場合はチューニングの余地がありそうです。
 そこからALLのものは
 場合によってですが、対象カラムにインデックスを貼ってあげるなどすると良いです。
 
-[https://gist.github.com/yukihirai0505/2234462dc5858e2c27b9](https://gist.github.com/yukihirai0505/2234462dc5858e2c27b9)
+{% gist yukihirai0505/2234462dc5858e2c27b9 %}
 
 <h2>◯◯分単位でログを集計したいなど</h2>
 
-[https://gist.github.com/yukihirai0505/a8c1e31ec1d453e868d4](https://gist.github.com/yukihirai0505/a8c1e31ec1d453e868d4)
+{% gist yukihirai0505/a8c1e31ec1d453e868d4 %}
 
 SETで変数を指定できます。
 
@@ -106,8 +107,7 @@ AのテーブルとBのテーブルをUNIONする時、
 Bのテーブル内でorder byをしていても反映されないことがあります。
 Bのテーブル内でソートしたものを更にセレクトして別テーブルで定義すればソートが効いた状態でUNIONできます。
 
-
-[https://gist.github.com/yukihirai0505/f30095bd5d907e49ef2a](https://gist.github.com/yukihirai0505/f30095bd5d907e49ef2a)
+{% gist yukihirai0505/f30095bd5d907e49ef2a %}
 
 ## トランザクションの理解
 
@@ -142,7 +142,7 @@ ERROR 1148 (42000): The used command is not allowed with this MySQL version
 
 次に、
 
-[https://gist.github.com/yukihirai0505/76fff4aa6a4ada62be0c](トランザクションでデータの不整合を防ぐ)
+{% gist yukihirai0505/76fff4aa6a4ada62be0c %}
 
 としてあげます。
 
@@ -172,7 +172,7 @@ Macの方は
 
 これも便利なので是非知っておきたい。
 
-[http://qiita.com/ques0942/items/acfdd5382c638580ce0b:embed:cite]
+[selectした結果をinsertする](http://qiita.com/ques0942/items/acfdd5382c638580ce0b)
 
 ## 最後に
 

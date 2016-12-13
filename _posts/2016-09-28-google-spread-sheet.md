@@ -37,8 +37,7 @@ GoogleAppsScriptでその作業を自動化してみました。
 まず、スクリプトエディタ上でGoogleAnalyticsAPIをONにして
 次にコードを書いていきます。
 
-
-[https://gist.github.com/yukihirai0505/80e75c5493698a85f927](https://gist.github.com/yukihirai0505/80e75c5493698a85f927)
+{% gist yukihirai0505/80e75c5493698a85f927 %}
 
 上記のコードではpathを指定して、
 全体の結果とpath毎の結果を取得してスプレッドシートにデータをセットしてくれるメソッドです。
@@ -47,14 +46,14 @@ GoogleAppsScriptでその作業を自動化してみました。
 
 また、今回日付を扱うことが多かったのでその処理をまとめておきました。
 
-[https://gist.github.com/yukihirai0505/5d23464ba18213628ead](https://gist.github.com/yukihirai0505/5d23464ba18213628ead)
+{% gist yukihirai0505/5d23464ba18213628ead %}
 
 
 ## 日別/週別/月別で実行する
 
 あとは、上記のメソッドを用いて日別/週別/月別で実行するスクリプトを書いていきます。
 
-[https://gist.github.com/yukihirai0505/be0716571902d23c2600](https://gist.github.com/yukihirai0505/be0716571902d23c2600)
+{% gist yukihirai0505/be0716571902d23c2600 %}
 
 これは週毎に実行されるスクリプトですが、
 これと同じようなものを日別・月別でつくってあげます。
@@ -65,8 +64,7 @@ GoogleAppsScriptでその作業を自動化してみました。
 トリガーはGUIからも作成・削除できますが
 コード上で管理しておくようにしてみました。
 
-
-[https://gist.github.com/yukihirai0505/b7d49b37d7a23266a0af](https://gist.github.com/yukihirai0505/b7d49b37d7a23266a0af)
+{% gist yukihirai0505/b7d49b37d7a23266a0af %}
 
 上から順に、
 
@@ -91,3 +89,4 @@ GoogleAppsScriptでその作業を自動化してみました。
 随時修正していきたいと思います！
 
 [https://gist.github.com/yukihirai0505](https://gist.github.com/yukihirai0505)
+

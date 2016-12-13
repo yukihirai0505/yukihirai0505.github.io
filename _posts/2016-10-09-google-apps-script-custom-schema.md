@@ -69,7 +69,7 @@ Googleが提供しているサービスがより便利に使用できるよう�
 まずはSchemaの作成を行います。
 コードは下記のような感じになります。
 
-[https://gist.github.com/yukihirai0505/d4c8168e91420b00ef25](https://gist.github.com/yukihirai0505/d4c8168e91420b00ef25)
+{% gist yukihirai0505/d4c8168e91420b00ef25 %}
 
 Schemaはデータベースでいうテーブル名みたいなもので、
 その中身がカラム名のような感じになっています。
@@ -82,7 +82,7 @@ Schemaはデータベースでいうテーブル名みたいなもので、
 さて、次に作成したSchemaの情報をUserの方で更新していきます。
 コードは下記のような感じになります。
 
-[https://gist.github.com/yukihirai0505/727b5ec2d5a31ccc8aa1](https://gist.github.com/yukihirai0505/727b5ec2d5a31ccc8aa1)
+{% gist yukihirai0505/727b5ec2d5a31ccc8aa1 %}
 
 これで指定したユーザーのcustomSchemaの更新ができます。
 今回は先ほど作成したemploymentDataに値を保存しています。
@@ -100,7 +100,7 @@ User情報を取得する際に `full` や `custom` などのオプションを�
 
 コードに落とすと下記のような感じになります。
 
-[https://gist.github.com/yukihirai0505/ee8035c07d5c978d7099](https://gist.github.com/yukihirai0505/ee8035c07d5c978d7099)
+{% gist yukihirai0505/ee8035c07d5c978d7099 %}
 
 このように `custom` で指定する際は
 `customFieldMask` でSchemaを指定してあげる必要があります。
@@ -121,7 +121,7 @@ Schemaを `multiValued:true` で保存した場合には
 下記のドキュメントを参考に値を保存しましょう。
 →[https://developers.google.com/admin-sdk/directory/v1/guides/manage-schemas#set_fields](https://developers.google.com/admin-sdk/directory/v1/guides/manage-schemas#set_fields)
 
-[https://gist.github.com/yukihirai0505/b4a40b1fe1ad52597b36](https://gist.github.com/yukihirai0505/b4a40b1fe1ad52597b36)
+{% gist yukihirai0505/b4a40b1fe1ad52597b36 %}
 
 > Single-valued custom fields use the "field1": "value1" format. Multi-valued fields are similar to other multi-value fields, such as addresses where individual values can be tagged as standardType with allowed values custom, home, work, or other or as a customType
 

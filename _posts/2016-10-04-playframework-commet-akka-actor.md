@@ -50,36 +50,37 @@ Akka Actorは並列処理のためのもので、
 まずはカウントをもつUserを作成します。
 本来はここにちゃんとしたmodelのUserを置きたいところですが、今回はめちゃめちゃさっぱりにします。
 
-[https://gist.github.com/yukihirai0505/ce75b97f80d4fab1a803](https://gist.github.com/yukihirai0505/ce75b97f80d4fab1a803)
+{% gist yukihirai0505/ce75b97f80d4fab1a803 %}
 
 ## Actorに渡す用のクラスを作成
 
 次にCometオブジェクトをもつActorに渡す用のクラスを作成します。
 
-[https://gist.github.com/yukihirai0505/2d3d4774cd89b7c57fc9](https://gist.github.com/yukihirai0505/2d3d4774cd89b7c57fc9)
+{% gist yukihirai0505/2d3d4774cd89b7c57fc9 %}
 
 ## Actorの実装
 
 次にActorを実装します。
 
-[https://gist.github.com/yukihirai0505/87a9fc69c9b5d85e8f7f](https://gist.github.com/yukihirai0505/87a9fc69c9b5d85e8f7f)
+{% gist yukihirai0505/87a9fc69c9b5d85e8f7f %}
 
 ## Controllerの実装
 
 ここまで出来たら次はControllerを実装していきます。
 
-[https://gist.github.com/yukihirai0505/7d4e68839f8f32baf340](https://gist.github.com/yukihirai0505/7d4e68839f8f32baf340)
+{% gist yukihirai0505/7d4e68839f8f32baf340 %}
+
 
 ## Viewの実装
 
 最後にviewを作成してあげます。
 
-[https://gist.github.com/yukihirai0505/ddb872a3a4a35d51461d](https://gist.github.com/yukihirai0505/ddb872a3a4a35d51461d)
+{% gist yukihirai0505/ddb872a3a4a35d51461d %}
 
 これで
 forever iframeによりサーバーからpushがある度にiframeの中身が書き換わって
 
-[https://gist.github.com/yukihirai0505/cb0718222b0c27f8be12](https://gist.github.com/yukihirai0505/cb0718222b0c27f8be12)
+{% gist yukihirai0505/cb0718222b0c27f8be12 %}
 
 ここの部分でブラウザを動的に書き換えています。
 

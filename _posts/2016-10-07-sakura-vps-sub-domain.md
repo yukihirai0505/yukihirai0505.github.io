@@ -33,7 +33,7 @@ http://portfolio.yukihirai0505.com の
 自分はnginxを使用しているので、
 今回作成したファイルを見てみると
 
-[https://gist.github.com/yukihirai0505/09bedf8ea5e4dcd3d2d3](https://gist.github.com/yukihirai0505/09bedf8ea5e4dcd3d2d3)
+{% gist yukihirai0505/09bedf8ea5e4dcd3d2d3 %}
 
 このような感じになります。
 一回覚えてしまえばかなり手軽に設定できるので、

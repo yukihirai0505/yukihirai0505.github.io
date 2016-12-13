@@ -45,13 +45,13 @@ CSSをスペースや改行などを除いて縮小してくれるcssnanoなど�
 
 ちなみにこれらはnpmでモジュールをインストールする必要があります。
 
-[https://gist.github.com/yukihirai0505/2b03c9a41ce052252976](https://gist.github.com/yukihirai0505/2b03c9a41ce052252976)
+{% gist yukihirai0505/2b03c9a41ce052252976 %}
 
 ## gulpfile.jsの記述
 
 今回は下記のような感じでgulpfile.jsを記述してみました。
 
-[https://gist.github.com/yukihirai0505/1375aeb81fcfe1d8514f](https://gist.github.com/yukihirai0505/1375aeb81fcfe1d8514f)
+{% gist yukihirai0505/1375aeb81fcfe1d8514f %}
 
 これで今回インストールしたモジュールを使用することができます。
 
@@ -63,13 +63,13 @@ CSSをスペースや改行などを除いて縮小してくれるcssnanoなど�
 
 cssの中身はそれぞれのモジュールを使ってみたかったのでこんな感じで記述してみました。
 
-[https://gist.github.com/yukihirai0505/f7af05c87363e82621cb](https://gist.github.com/yukihirai0505/f7af05c87363e82621cb)
+{% gist yukihirai0505/f7af05c87363e82621cb %}
 
 これでgulpを実行すると
 
 こんな感じで生成してくれました。
 
-[https://gist.github.com/yukihirai0505/2ef05756187d0e4968e8](https://gist.github.com/yukihirai0505/f7af05c87363e82621cb)
+{% gist yukihirai0505/2ef05756187d0e4968e8 %}
 
 CSSで入れ子ができたり、変数が使えるようになると
 かなり楽に記述していくことができます。

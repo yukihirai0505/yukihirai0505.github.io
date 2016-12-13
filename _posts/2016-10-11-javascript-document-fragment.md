@@ -14,7 +14,7 @@ DocumentFragmentはノードの一種です。
 ノードなのでappendChildなどで子ノードを追加したりすることができます。
 仮に下記のようなコードの場合にDocumentFragmentを使用しない場合を見ていきます。
 
-[https://gist.github.com/yukihirai0505/8dd13d540d38febae494](https://gist.github.com/yukihirai0505/8dd13d540d38febae494)
+{% gist yukihirai0505/8dd13d540d38febae494 %}
 
 こちらはjQueryを使用してAPIからJSONでオブジェクトを取得し、
 成功したときに取得したオブジェクトの値をテーブルにappendしていくといった内容です。
@@ -30,7 +30,7 @@ appendするということは画面を書き直しているので、
 こんなときにDocumentFragmentが役に立ちます。
 DocumentFragmentを使用すると下記のような感じになります。
 
-[https://gist.github.com/yukihirai0505/7e14f1fe2c5d4a04f89f](https://gist.github.com/yukihirai0505/7e14f1fe2c5d4a04f89f)
+{% gist yukihirai0505/7e14f1fe2c5d4a04f89f %}
 
 DocumentFragmentは先述した通りノードの一種なので、
 appendしていくことができます。

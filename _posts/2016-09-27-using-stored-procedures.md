@@ -55,7 +55,7 @@ CREATE TABLE [DB名].`event` (
 
 次に下記のようなストアドプロシージャを書いていきます。
 
-[https://gist.github.com/yukihirai0505/c8e100b41760740ca668](https://gist.github.com/yukihirai0505/c8e100b41760740ca668)
+{% gist yukihirai0505/c8e100b41760740ca668 %}
 
 コードの中にコメントを書いてますが、
 動的にSQLを作成し、それを実行しながらwhile文を回すことでデータを指定日から1ヶ月分のデータを作成するサンプルです。
@@ -82,7 +82,7 @@ SQL文とは違った文を使用するのでパッと見なんやこら？と�
 for文のような役割を担ってくれます。
 
 
-[https://gist.github.com/yukihirai0505/79b2a87d40976ec20853](https://gist.github.com/yukihirai0505/79b2a87d40976ec20853)
+{% gist yukihirai0505/79b2a87d40976ec20853 %}
 
 このような感じで、①で作成したeventテーブルからidのデータをカーソルに保存して
 

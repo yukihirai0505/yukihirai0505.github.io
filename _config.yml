@@ -9,3 +9,5 @@ github_username:  yukihirai0505
 
 markdown: kramdown
 theme: minima
+gems:
+  - jekyll-gist

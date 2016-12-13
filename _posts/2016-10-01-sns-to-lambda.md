@@ -41,7 +41,7 @@ categories: Development
 その場合は、
 自分が書いたものをGistにあげたのでこちらを試してみていただくといいかもしれません。
 
-[https://gist.github.com/yukihirai0505/0af52c9c98cc998a10a3](https://gist.github.com/yukihirai0505/0af52c9c98cc998a10a3)
+{% gist yukihirai0505/0af52c9c98cc998a10a3 %}
 
 基本、うまくいかない場合はLog見ながらデバッグしていけばだいたい解決するかと思います。
 自分は最初そのまんまコピペしたら下記のエラーがでたりしたので、

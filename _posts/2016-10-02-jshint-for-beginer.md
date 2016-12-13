@@ -38,7 +38,7 @@ npm install -g jshint
 
 インストールできたら適当にJSHintの設定ファイル(.jshintrc)をホームディレクトリで作成しましょう。
 
-[https://gist.github.com/yukihirai0505/a2c3c589365dc8b09828](https://gist.github.com/yukihirai0505/a2c3c589365dc8b09828)
+{% gist yukihirai0505/a2c3c589365dc8b09828 %}
 
 ひとまずこのくらいでいいかと思います。
 他にもいろいろ見てみたい方はこちらのサイトから確認できます。
@@ -74,11 +74,11 @@ VimとSublimeText2で設定してみました。
 
 NeoBundleのインストールはこんな感じでどうぞ
 
-[https://gist.github.com/yukihirai0505/d00f9cd3c9622f26ab5d](https://gist.github.com/yukihirai0505/d00f9cd3c9622f26ab5d)
+{% gist yukihirai0505/d00f9cd3c9622f26ab5d %}
 
 次にホームディレクトリで.vimrcファイルを設定しましょう。
 
-[https://gist.github.com/yukihirai0505/20fdf1edb42f44a90037](https://gist.github.com/yukihirai0505/20fdf1edb42f44a90037)
+{% gist yukihirai0505/20fdf1edb42f44a90037 %}
 
 ここまでできたらまずはシンタックスチェック系のこちらのプラグインをインストールします。
 
@@ -88,13 +88,13 @@ NeoBundle 'scrooloose/syntastic'
 
 これを設定ファイルに追加していきます。
 
-[https://gist.github.com/yukihirai0505/e76108e927581c1d1b93](https://gist.github.com/yukihirai0505/e76108e927581c1d1b93)
+{% gist yukihirai0505/e76108e927581c1d1b93 %}
 
 これでVimを開いたらscrooloose/syntasticをインストールするかどうか聞かれるのでインストールしておきましょう。
 
 次に.vimrcファイルに設定を追加していきます。
 
-[https://gist.github.com/yukihirai0505/a8a8fcbfbc560d1db1ec](https://gist.github.com/yukihirai0505/a8a8fcbfbc560d1db1ec)
+{% gist yukihirai0505/a8a8fcbfbc560d1db1ec %}
 
 ひとまずこんな感じで設定してあげればVimで編集するときにJSHintの構文チェックが動いてくれます。
 この場合はファイル開くときとかセーブするときとか構文チェックが走ってくれます。
@@ -141,13 +141,13 @@ Google JavaScript Style Guideに則ってチェック・修正を行えるツー
 
 インストールは
 
-[https://gist.github.com/yukihirai0505/8d1e623bfa62edeecb9c](https://gist.github.com/yukihirai0505/8d1e623bfa62edeecb9c)
+{% gist yukihirai0505/8d1e623bfa62edeecb9c %}
 
 これでオッケーです。
 
 あとはVimに設定を追加してあげれば使用できます。
 
-[https://gist.github.com/yukihirai0505/b99e30b2ccb83ab40ee0](https://gist.github.com/yukihirai0505/b99e30b2ccb83ab40ee0)
+{% gist yukihirai0505/b99e30b2ccb83ab40ee0 %}
 
 これでオッケーです。
 

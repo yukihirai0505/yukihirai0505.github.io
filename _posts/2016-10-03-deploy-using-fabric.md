@@ -21,11 +21,11 @@ Fabricは
 
 例えば下記のようにyum_updateというメソッドを作成したファイルを用意します。
 
-[https://gist.github.com/yukihirai0505/cd46406c76e578c6d773](https://gist.github.com/yukihirai0505/cd46406c76e578c6d773)
+{% gist yukihirai0505/cd46406c76e578c6d773 %}
 
 そうするとこのメソッドを次のように叩くことができます。
 
-[https://gist.github.com/yukihirai0505/f7e4057692bf980f0c61](https://gist.github.com/yukihirai0505/f7e4057692bf980f0c61)
+{% gist yukihirai0505/f7e4057692bf980f0c61 %}
 
 これを叩けばリモートサーバー上でsudo yum updateを実行してくれるのです！
 
@@ -36,7 +36,7 @@ Fabricは
 これはファイル上に書いておくこともできます。
 今回、自分のサーバー対して作ったものを簡単にしたものが下記になります。
 
-[https://gist.github.com/yukihirai0505/5964130f78d6fc09414e](https://gist.github.com/yukihirai0505/5964130f78d6fc09414e)
+{% gist yukihirai0505/5964130f78d6fc09414e %}
 
 ここの下記の部分で設定を書いておくことができます。
 
