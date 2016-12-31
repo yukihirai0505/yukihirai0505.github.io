@@ -4,7 +4,6 @@ description: > # this means to ignore newlines until "baseurl:"
   Yuki Hirai
 baseurl: ""
 url: "https://yukihirai0505.github.io"
-twitter_username: yukihirai0505
 github_username:  yukihirai0505
 
 markdown: kramdown

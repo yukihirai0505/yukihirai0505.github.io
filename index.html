@@ -3,48 +3,83 @@ layout: default
 title: Home
 ---
 
-<div class="home">
-  <h1 class="page-heading">Tech Blog</h1>
-  <ul class="post-list">
-    {% for post in paginator.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
 
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title | escape }}</a>
-        </h2>
+<div id="primary" class="col-md-9 mb-xs-24 side-right">
+  <header>
+    <h1 class="page-title screen-reader-text"></h1>
+  </header>
+  {% for post in paginator.posts %}
+  <article class="post-snippet mb64 post type-post status-publish format-standard has-post-thumbnail hentry category-diary category-job category-programming">
+    <header class="entry-header nolist">
+      <!--
+      <a class="text-center" href="{{ post.url | prepend: site.baseurl }}" title="Recent personal activities">
+        <img width="848" height="566" src="./yuky_files/PAKS_9V9A8467_TP_V.jpg" class="mb24 wp-post-image" alt="" srcset="https://i0.wp.com/blog.yukihirai0505.com/wp-content/uploads/2016/12/PAKS_9V9A8467_TP_V.jpg?w=1600&amp;ssl=1 1600w, https://i0.wp.com/blog.yukihirai0505.com/wp-content/uploads/2016/12/PAKS_9V9A8467_TP_V.jpg?resize=300%2C200&amp;ssl=1 300w, https://i0.wp.com/blog.yukihirai0505.com/wp-content/uploads/2016/12/PAKS_9V9A8467_TP_V.jpg?resize=768%2C512&amp;ssl=1 768w, https://i0.wp.com/blog.yukihirai0505.com/wp-content/uploads/2016/12/PAKS_9V9A8467_TP_V.jpg?resize=1024%2C682&amp;ssl=1 1024w, https://i0.wp.com/blog.yukihirai0505.com/wp-content/uploads/2016/12/PAKS_9V9A8467_TP_V.jpg?resize=848%2C566&amp;ssl=1 848w" sizes="(max-width: 848px) 100vw, 848px">
+      </a>
+      -->
+      <h2 class="post-title entry-title">
+        <a href="{{ post.url | prepend: site.baseurl }}" rel="bookmark">
+          {{ post.title | escape }}
+        </a>
+      </h2>
+      <ul class="post-meta">
+        <li><i class="fa fa-user"></i><span><a href="https://blog.yukihirai0505.com/author/yukihirai/" title="Yuky">Yuky</a></span></li>
+        <li><i class="fa fa-calendar"></i><span class="posted-on"><time class="entry-date published">{{ post.date | date: "%b %-d, %Y" }}</time>{{ post.date | date: "%b %-d, %Y" }}</time></span></li>
+        <!--
+        <li>
+        <i class="fa fa-folder-open-o"></i>
+        <span class="cat-links">
+        <a href="https://blog.yukihirai0505.com/category/diary/" title="View all posts in Diary">
+          Diary
+        </a>
+        </span>
+        </li>
+        -->
+      </ul><!-- post-meta -->
+    </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      <p>{{ post.excerpt | remove: '<p>' | remove: '</p>' }}...</p>
+      <div>
+        <a class="btn-filled btn" href="{{ post.url | prepend: site.baseurl }}" title="{{ post.title }}">
+          Read More
+        </a>
+      </div>
+    </div><!-- .entry-content -->
+  </article><!-- #post-## -->
+  {% endfor %}
+  <div class="text-center">
+    <ul class="pagination">
+      {% if paginator.total_pages > 1 %}
+      {% for page in (1..paginator.total_pages) %}
+      {% if page == paginator.page %}
+      <li class="active">
+        <a href="#">{{ page }}</a>
       </li>
-    {% endfor %}
-  </ul>
-
-  <!-- Pagination links -->
-  {% if paginator.total_pages > 1 %}
-  <div class="pagination">
-    {% if paginator.previous_page %}
-    <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&laquo; Prev</a>
-    {% else %}
-    <span>&laquo; Prev</span>
-    {% endif %}
-
-    {% for page in (1..paginator.total_pages) %}
-    {% if page == paginator.page %}
-    <em>{{ page }}</em>
-    {% elsif page == 1 %}
-    <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}</a>
-    {% else %}
-    <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>
-    {% endif %}
-    {% endfor %}
-
-    {% if paginator.next_page %}
-    <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Next &raquo;</a>
-    {% else %}
-    <span>Next &raquo;</span>
-    {% endif %}
+      {% elsif page == 1 %}
+      <li>
+        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}" class="inactive">{{
+          page }}</a>
+      </li>
+      {% else %}
+      <li>
+        <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}"
+           class="inactive">{{ page }}</a>
+      </li>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+    </ul>
   </div>
-  {% endif %}
-
-
-  <p class="rss-subscribe" style="margin-top: 50px;">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
-
-</div>
+</div><!-- #primary -->
+<aside id="secondary" class="widget-area col-md-3 hidden-sm" role="complementary">
+  <section id="recent-posts-2" class="widget widget_recent_entries">
+    <h2 class="widget-title">Recent Posts</h2>
+    <ul>
+      {% for post in site.posts limit:5 %}
+      <li>
+        <a href="{{ post.url }}">{{ post.title }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+</aside><!-- #secondary -->
