@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  "LetsEncryptを自動更新するスクリプトの作成"
+title:  "How to automatically renew certificates"
 date:   2016-09-24 13:09:43 +0900
 categories: Development
 ---
 
-今回メールを見ていたら下記のようなものが届きました。
+When I was looking at the mail today, something like the one below arrived.
 
 ```
 Hello,
@@ -22,63 +22,50 @@ Regards,
 The Let's Encrypt Team
 ```
 
-内容を見てみると、LetsEncryptで設定したSSLの証明書がきれるから更新してね。とのこととでした。
-毎回手作業でやるのは面倒なのでcronを使用して、自動更新するようにしました。
+Looking at the contents,
+please renew it because SSL certificate set in LetsEncrypt will expire.
+It is troublesome to do it manually every time
+so I decided to use cron to update it automatically.
 
-## シェルスクリプトの作成
+## Creating a shell script
 
-まずは、LetsEncryptを更新するシェルスクリプトをサーバーのホームディレクトリに作成しました。
+First of all,
+I created a shell script to update LetsEncrypt in the server's home directory.
 
-`renew_letsencrypt.sh`を作成する。
+`renew_letsencrypt.sh`
 
 ```
 #!/bin/sh
 cd letsencrypt/
 git pull
 sudo service nginx stop
-./letsencrypt-auto renew
+./letsencrypt-auto renew --force-renew
 sudo service nginx start
 ```
 
-## crontabの設定
+## Setting crontab
 
-次にcrontabに新しいジョブを追加します。
-
-`crontab -e`で毎月月初の深夜に上記のシェルスクリプトを実行するジョブを追加します。
-
+I added a new job to crontab,
+And then I added a job to run the above shell script at the beginning of the month to `crontab - e`.
 
 ```
 0 0 1 * * sh ~/renew_letsencrypt.sh
 ```
 
-ただ、期限が切れる30日以内じゃないと証明書は更新されないので
-まあどのタイミングにするかはお好みでどうぞ。
+## Execute the shell script with sudo
 
-```
-renew only renews certificates when they are less than 30 days from expiration, allowing you to run it in something like cron and only renew the cert when necessary.
-```
-
-## シェルスクリプトでsudoの実行
-
-最後にシェルスクリプトで`sudo`を実行しているので、
-パスワード入力を受け付けなくてもいいようにsudo権限を与えるように設定します。
+This shell script contains `sudo` .
+I set sudo permission so that it can be executed without entering a password.
 
 ```
 sudo visudo
 ```
 
-でパスワードを入力して
-ファイルの末尾に
+After entering the password,
+I added a following sentence at the end of the file
 
 ```
-%実行ユーザー名   ALL=(ALL)       NOPASSWD: ALL
+%{USERNAME}   ALL=(ALL)       NOPASSWD: ALL
 ```
 
-を追記してあげれば大丈夫です。
-
-以上で、LetsEncryptの自動更新の設定ができたかと思います。
-
-まだ実際に動いてないのでちゃんと更新するかわかりませんが 笑
-めちゃめちゃお手軽ですね。
-
-ちなみに、今回はこのスクリプトを実行してちゃんと証明書更新されているみたいでした。
+I have successfully set up LetsEncrypt's automatic update.
