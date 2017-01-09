@@ -1,15 +1,15 @@
 ---
 layout: post
-title:  "Supervisorでプロセス管理"
+title:  "A Process Control System — Supervisor"
 date:   2016-09-23 13:09:43 +0900
 categories: Development
 ---
 
-今まで個人でPlayframeworkを使用して作成したアプリをデプロイする際にfabricからデプロイしていて、
-`RUNNING_PID`ファイルを直接指定してプロセスkillして~みたいな内容だったので
-python製のプロセス管理ツールである[Supervisor](http://supervisord.org/)を使用していきます。
+I used fabric when deploying applications created with Playframework so far.
+The content was that it first kills the process by directly specifying the `RUNNING_PID` file to stop the application.
+This time, I will use [supervisor] (http://supervisord.org/) which is a process control tool made by python.
 
-最終的にはfabricの内容を下記のような感じにします。
+Ultimately, I will make the contents of the fabric feel like the following.
 
 **before**
 
@@ -25,10 +25,10 @@ if run('ps -ef | grep "%(root)s/target/universal/stage" | grep -v grep | wc -l' 
 run("supervisorctl stop [プロセス名]")
 {% endhighlight %}
 
-## supervisorのインストール
+## Installing supervisor
 
-まずは下記URLを参考にインストールを進めていきます。
-リモートサーバーに`supervisor`をインストールしていきます。
+First you proceed with installation referring to the following URL.
+you should install `supervisor` on the remote server.
 
 http://supervisord.org/installing.html
 
@@ -40,20 +40,20 @@ pip install supervisor
 
 ## supervisord.confの設定
 
-次に設定ファイルを作成します。
+Next, you create a configuration file for supervisor.
 
-`supervisor`をインストールすると
-`echo_supervisord_conf`というコマンドが使用できるようになるので、下記のように設定ファイルを作成します。
+After installing `supervisor`
+you can use `echo_supervisord_conf` command.
 
 ```
 echo_supervisord_conf > /etc/supervisord.conf
 ```
 
-権限によっては指定できない場合もあるので、
-作成場所は各々で。
+Depending on the permission you may not be able to specify,
+so you choose the place of creation.
 
-ファイルに今回追加したい処理を記述しておきます。
-自分の場合だと今回はPlayframworkを起動するcommandを下記に記述しておきます。
+And then, you describe the processing you want to add this time to the file.
+In case of myself, here is the command to start Playframwork in this time.
 
 ```
 [program:sample-daemon]
@@ -67,46 +67,45 @@ redirect_stderr=true
 stdout_logfile=/dev/null
 ```
 
-上記の設定を細かく見ていくと
+I will explain the above setting in detail.
 
 - `program:sample-daemon`
-    - プロセスの名前(今回はsample-daemonとしている)
+    - The name of the process
 - `command`
-    - 実行する処理の記述
+    - Description of the processing to be executed
 - `autostart=true`
-    - supervisorが起動したら自動的に起動する
+    - Automatically starts when supervisor starts up
 - `autoretart=true`
-    - 落ちても自動的に再起動する
+    - Automatically restart even if it stops
 - `user=hogehoge`
-    - 処理を実行するユーザーを記述する
+    - Describe the user executing the process
 - `redirect_stderr=true`
-    - エラー出力を標準出力にリダイレクトする
+    - Redirect error output to standard output
 - `stdout_logfile=/dev/null`
-    - 標準出力を捨てる(ログをとりたい場合はファイルパスを指定)
+    - Discard the standard output (specify the file path if you want to log)
 
-次に
+Next, to start supervisor
+you should execute following command.
 
 ```
 supervisord -c supervisord.conf
 ```
 
-としてあげます。
-
 ## supervisorctlの実行
 
-これで下記コマンドで処理を実行することができます。
+Now you can execute the processing with the following command.
 
 ```
 supervisorctl start sample-daemon
 ```
 
-処理をストップするときは
+to stop this process
 
 ```
 supervisorctl stop sample-daemon
 ```
 
-ここまでくれば`fabric`で
+After all, this `fabric` file 
 
 {% highlight python %}
 if run('ps -ef | grep "%(root)s/target/universal/stage" | grep -v grep | wc -l' % {"root": env.project_name}) == "1":
@@ -114,18 +113,14 @@ if run('ps -ef | grep "%(root)s/target/universal/stage" | grep -v grep | wc -l' 
     run("kill `cat %(root)s/target/universal/stage/RUNNING_PID`" % {"root": env.server_dir})
 {% endhighlight %}
 
-みたいに書いていたところを
+to like this
 
 ```py
 run("supervisorctl stop sample-daemon")
 ```
 
-もちろんアプリを走らせる処理も
-
 ```py
 run("supervisorctl start sample-daemon")
 ```
 
-でオッケーです。
-
-とシンプルに記述することができます。
+It can be described simply.
