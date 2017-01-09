@@ -22,7 +22,7 @@ if run('ps -ef | grep "%(root)s/target/universal/stage" | grep -v grep | wc -l' 
 **after**
 
 {% highlight python %}
-run("supervisorctl stop [プロセス名]")
+run("supervisorctl stop [process name]")
 {% endhighlight %}
 
 ## Installing supervisor
@@ -38,7 +38,7 @@ easy_install pip
 pip install supervisor
 ```
 
-## supervisord.confの設定
+## Setting supervisord.conf
 
 Next, you create a configuration file for supervisor.
 
@@ -91,7 +91,7 @@ you should execute following command.
 supervisord -c supervisord.conf
 ```
 
-## supervisorctlの実行
+## Starting supervisorctl
 
 Now you can execute the processing with the following command.
 
