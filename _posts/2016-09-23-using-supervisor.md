@@ -32,11 +32,9 @@ you should install `supervisor` on the remote server.
 
 http://supervisord.org/installing.html
 
-```
-yum install python-setuptools
-easy_install pip
-pip install supervisor
-```
+    yum install python-setuptools
+    easy_install pip
+    pip install supervisor
 
 ## Setting supervisord.conf
 
@@ -45,9 +43,7 @@ Next, you create a configuration file for supervisor.
 After installing `supervisor`
 you can use `echo_supervisord_conf` command.
 
-```
-echo_supervisord_conf > /etc/supervisord.conf
-```
+    echo_supervisord_conf > /etc/supervisord.conf
 
 Depending on the permission you may not be able to specify,
 so you choose the place of creation.
@@ -55,17 +51,15 @@ so you choose the place of creation.
 And then, you describe the processing you want to add this time to the file.
 In case of myself, here is the command to start Playframwork in this time.
 
-```
-[program:sample-daemon]
-process_name=%(program_name)s
-directory=[hogehoge]
-command=/bin/bash -c "/path/to/target/universal/stage/bin/app"
-autostart=true
-autorestart=true
-user=hogehoge
-redirect_stderr=true
-stdout_logfile=/dev/null
-```
+    [program:sample-daemon]
+    process_name=%(program_name)s
+    directory=[hogehoge]
+    command=/bin/bash -c "/path/to/target/universal/stage/bin/app"
+    autostart=true
+    autorestart=true
+    user=hogehoge
+    redirect_stderr=true
+    stdout_logfile=/dev/null
 
 I will explain the above setting in detail.
 
@@ -87,23 +81,17 @@ I will explain the above setting in detail.
 Next, to start supervisor
 you should execute following command.
 
-```
-supervisord -c supervisord.conf
-```
+    supervisord -c supervisord.conf
 
 ## Starting supervisorctl
 
 Now you can execute the processing with the following command.
 
-```
-supervisorctl start sample-daemon
-```
+    supervisorctl start sample-daemon
 
 to stop this process
 
-```
-supervisorctl stop sample-daemon
-```
+    supervisorctl stop sample-daemon
 
 After all, this `fabric` file 
 
@@ -115,12 +103,8 @@ if run('ps -ef | grep "%(root)s/target/universal/stage" | grep -v grep | wc -l' 
 
 to like this
 
-```py
-run("supervisorctl stop sample-daemon")
-```
+    run("supervisorctl stop sample-daemon")
 
-```py
-run("supervisorctl start sample-daemon")
-```
+    run("supervisorctl start sample-daemon")
 
 It can be described simply.

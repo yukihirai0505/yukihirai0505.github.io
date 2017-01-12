@@ -1,92 +1,62 @@
 ---
 layout: post
-title:  "GoogleスプレッドシートとGoogleAppsScriptでアナリティクスのレポートを自動化"
+title:  "How to automate Analytics reports with Google Spreadsheet and GoogleAppsScript"
 date:   2016-09-28 13:09:43 +0900
 categories: Development
 ---
 
-今回、Googleスプレッドシート上でアナリティクスのデータを管理していたので
-GoogleAppsScriptでその作業を自動化してみました。
+I manage data on Analytics on Google Spreadsheet.
+This time I tried to automate that work with GoogleAppsScript.
 
-当初、レポート業務を引き継いだとき、
-いちいちアナリティクスを開いて期間を選択して結果をコピペして貼り付ける。
-これが日毎、週ごと、月ごととなるので
-多い時になると週明けが月初のときはGoogleアナリティクスのページをぽちぽちしまくらねばなりません。
+When I took over reporting work, it seems too troublesome.
+open analytics each time, select a period, copy and paste the result...
+This is daily, weekly, monthly,,,
 
-それが非常に面倒くさいのでGoogleAppsScriptを使用して自動化することにしました。
+So I decided to automate it using GoogleAppsScript.
 
-## 自動化の方法
+## How to automate this reporting work
 
-まず、自動化の方法ですがいくつかあるみたいです。
+There are some ways
 
-- アドオンを使用する方法
+- Using add-on
+- Using GoogleAppsScript
 
-[http://tonari-it.com/google-analytics-spreadsheet/](http://tonari-it.com/google-analytics-spreadsheet/)
+I experienced to use GoogleAppsScript,
+So I chose the later.
 
-- Google Apps Scriptを使用する方法
+## A script for Google Analytics API
 
-[http://qiita.com/sebisawa/items/1ae2f871fb8ff3366064](http://qiita.com/sebisawa/items/1ae2f871fb8ff3366064)
-
-前にGoogle Apps Scriptは触ったことがあったので、
-今回は後者のAppsScriptを使用する方法でいきます。
-
-[http://yukihirai.hatenablog.com/entry/%3Fp%3D2769](http://yukihirai.hatenablog.com/entry/%3Fp%3D2769)
-
-## Google Analytics API用のスクリプト
-
-まず、スクリプトエディタ上でGoogleAnalyticsAPIをONにして
-次にコードを書いていきます。
+First, I enable GoogleAnalyticsAPI on script editor.
+Next, I wrote codes.
 
 {% gist yukihirai0505/80e75c5493698a85f927 %}
 
-上記のコードではpathを指定して、
-全体の結果とpath毎の結果を取得してスプレッドシートにデータをセットしてくれるメソッドです。
+In the above code,
+if you specify path,
+we get the whole result and the results for each path and set the data in the spreadsheet.
 
-## 日付を扱うスクリプト
+## A script for date
 
-また、今回日付を扱うことが多かったのでその処理をまとめておきました。
+Since I often dealt with dates, I summarized the processing.
 
 {% gist yukihirai0505/5d23464ba18213628ead %}
 
+## Execute by daily / weekly / monthly
 
-## 日別/週別/月別で実行する
-
-あとは、上記のメソッドを用いて日別/週別/月別で実行するスクリプトを書いていきます。
+After that, I wrote a script to execute by daily / weekly / monthly using the above method.
 
 {% gist yukihirai0505/be0716571902d23c2600 %}
 
-これは週毎に実行されるスクリプトですが、
-これと同じようなものを日別・月別でつくってあげます。
+This is a script that is executed weekly,
+So I made something like this on a daily / monthly basis.
 
-## トリガーの設定
+## Trigger settings
 
-最後にトリガーで定期実行する処理を書いてあげます。
-トリガーはGUIからも作成・削除できますが
-コード上で管理しておくようにしてみました。
+We can set trigger for each script on GoogleAppsScript.
 
-{% gist yukihirai0505/b7d49b37d7a23266a0af %}
-
-上から順に、
-
-- 毎日10時に実行
-- 毎週月曜日の10時に実行
-- 毎月1日の10時に実行
-
-といった形になります。
-
-これで書いたスクリプトが自動実行されるようになります。
-
-ここまでしておけば今後のGoogleAnalytics関連の処理は自動で行われるので、
-自分が何もしなくても
-「おー、平井君は毎日データ集計しててえらい！」
-という嬉しい結果を得ることができます。
-
-入力ミスもなくなりますし、いいことずくめですね。
-
-コードに関してはノンストップで一気に書いていったので、
-修正点があればgistでコメントいただけると嬉しいです^^
-
-随時修正していきたいと思います！
+- Run at 10 o'clock every day
+- Run at 10 o'clock every Monday
+- Run at 10 o'clock on the 1st of every month
 
 [https://gist.github.com/yukihirai0505](https://gist.github.com/yukihirai0505)
 

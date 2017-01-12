@@ -27,9 +27,7 @@ Before downloading this script and running it, let's install the command you nee
 
 And then, running this script
 
-```
-sh migrate.sh
-```
+    sh migrate.sh
 
 ## If you encounter an error...
 
