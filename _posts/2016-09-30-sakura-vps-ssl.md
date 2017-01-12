@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "さくらのVPSで無料SSL設定(Nginx)"
+title:  "Nginx with Let's Encrypt on CentOS"
 date:   2016-09-30 13:09:43 +0900
 categories: Development
 ---
