@@ -1,94 +1,84 @@
 ---
 layout: post
-title:  "ストアドプロシージャでなんでもありなSQL文を書いてみる"
+title:  "Introduction to Stored Procedures"
 date:   2016-09-27 13:09:43 +0900
 categories: Development
 ---
 
-エンジニアをやっていると、
+As engineers work, we often receive the following request.
 
-「こんなデータが欲しい」という要望を受けることがあったり、
-「こんなデータ出せないかな」なんて考えることがあります。
+- "Please show about this data"
+- "I wanna see user log" etc
 
-また、それらに対して通常のSQLを使用すると、
+But, if the content of the request is complicated, normal SQL may not be able to deal with it.
 
-- 結果的には出せるけど、実行するSQL文が複数に分かれてしまう。
-- うまく理想の形で出せない。
+Sometimes we face following situation.
 
-なんてことになることもあります。
+- As a result it can be issued, but the SQL statement to be executed is divided into two or more.
+- I can not get out in an ideal form well.
 
-そこで登場するのが**基本的になんでもあり**なストアドプロシージャです。
+At that time, Stored procedure may be efficient.
 
-## ストアドプロシージャについて
+## About stored procedure
 
-ストアドプロシージャ（STORED PROCEDURE）とは
+Stored procedure is ...
 
-> データベースに対する一連の処理手続きを1つのプログラム（PROCEDURE）にまとめ、 リレーショナル・データベース管理システム(RDBMS)に保存（STORED）したものです。 1つのストアドプロシージャには複数のSQLを記述することが可能です。(
-[http://northqra.com/stored_1.html:title]より引用)
+> In a database management system (DBMS),
+> a stored procedure is a set of Structured Query Language (SQL) statements with an assigned name that's stored in the database in compiled form so that it can be shared by a number of programs. 
+> qt: [http://searchoracle.techtarget.com/definition/stored-procedure](http://searchoracle.techtarget.com/definition/stored-procedure)
 
-こちらの基本的な使用の仕方は下記記事が参考になりました。
+The following article was helpful for how to use this.
+
+[https://dev.mysql.com/doc/refman/5.6/en/create-procedure.html](https://dev.mysql.com/doc/refman/5.6/en/create-procedure.html)
+
+And I created following stored procedure for practice.
+
+- ① a month's data from the specified date using the while statement
+- ② a table that counts the number of participants for the event using the cursor
+
+This is sample.
+I'm not sure it is practical or not.
+
+In addition, this sample uses MySQL.
+
+## ① a month's data from the specified date using the while statement
+
+First, I created this table.
 
 
-[https://dev.mysql.com/doc/refman/5.6/ja/create-procedure.html](https://dev.mysql.com/doc/refman/5.6/ja/create-procedure.html)
+    CREATE TABLE [DB名].`event` (
+      `id` INT NOT NULL,
+      `start_date` DATETIME NOT NULL,
+    PRIMARY KEY (`id`));
 
-[http://qiita.com/setsuna82001/items/e742338eb93e3a48ba46](http://qiita.com/setsuna82001/items/e742338eb93e3a48ba46)
 
- 上記を参考にした上で下記のようなストアドプロシージャをつくってみました。
-
-- ① while文を使用して指定日から1ヶ月分のデータを作成する
-- ② カーソルを使用してイベントに対する参加者の数をカウントするテーブルを作成する
-
-あくまでもサンプルであり実用的なものではないのであしからずw
-
-なお、今回のサンプルはMySQLを使用したものです。
-
-## ① while文を使用して指定日から1ヶ月分のデータを作成する
-
-まずは今回、練習で使用するテーブルを作成します。
-
-```
-CREATE TABLE [DB名].`event` (
-  `id` INT NOT NULL,
-  `start_date` DATETIME NOT NULL,
-  PRIMARY KEY (`id`));
-```
-
-次に下記のようなストアドプロシージャを書いていきます。
+Next, I write stored procedure like the one below.
 
 {% gist yukihirai0505/c8e100b41760740ca668 %}
 
-コードの中にコメントを書いてますが、
-動的にSQLを作成し、それを実行しながらwhile文を回すことでデータを指定日から1ヶ月分のデータを作成するサンプルです。
+I write comments in the code.
+It creates data for one month from the specified date by dynamically creating SQL and turning through while executing it.
 
-呼び出し方は
+How to call this procedure is like this
 
-```
-call プロシージャ名("2016-02-21");
-```
+    call {procedure name}("2016-02-21");
 
-のような感じです。
+## ② a table that counts the number of participants for the event using the cursor
 
-## ② カーソルを使用してイベントに対する参加者の数をカウントするテーブルを作成する
+I would like to dynamically create a table that takes the ID of each event in the column based on the above data.
+Here I used the cursor.
 
-次に、上記のデータをもとに各イベントのIDをカラムにとるようなテーブルを動的に作成していきたいと思います。
-ここではカーソルを使用していきます。
+It may be difficult to use cursor at the first time.
+But I think that it is easy to understand if you think separating each one.
 
-このカーソルというのを使用するのに、いくつか通常のプログラミングや
-SQL文とは違った文を使用するのでパッと見なんやこら？と思いますが
-それぞれを分解して考えればわかりやすくなります。
-
-このカーソルはあるテーブルに入っているデータを貯めておくことで、
-1レコードずつの結果をループ処理してくれます。
-for文のような役割を担ってくれます。
-
+This cursor saves the data contained in a table and loops the result of each record.
+It plays a role like a for statement.
 
 {% gist yukihirai0505/79b2a87d40976ec20853 %}
 
-このような感じで、①で作成したeventテーブルからidのデータをカーソルに保存して
+Like above program,
+I could create a table with all eventId in the column
+while saving id's data from the event table created in ① to the cursor and turning its id with a loop.
 
-そのidをループで回しながら
-
-すべてのeventIdをカラムにもったテーブルを作成することができます。
-
-最初は覚えることが少し多いので戸惑いますが
-わかってしまえば非常に便利です^^
+Initially I felt a lot of things to remember, so I am confused.
+But after understanding how to use stored procedure, it is very useful :)
