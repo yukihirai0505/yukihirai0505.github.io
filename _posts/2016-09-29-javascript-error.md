@@ -1,49 +1,32 @@
 ---
 layout: post
-title:  "JavascriptでUncaught SyntaxError: Unexpected token ILLEGALのエラー、Chromeのディベロッパーツールでファイルを見てみると謎の・・・がファイルの末尾に。。。"
+title:  "Uncaught SyntaxError: Unexpected token ILLEGAL ・・・ on Javascript Console"
 date:   2016-09-29 13:09:43 +0900
 categories: Development
 ---
 
-開発していて久々にハマったことがあったのでブログに記載しておきます。
+Since I was suffering from errors,
+So I write it on this blog.
 
-あるJavascriptファイルに変更を加えたいと思い、
-少し編集すると謎のエラーがでました。
+I thought that I wanted to make changes to a certain Javascript file,
+and when I edited it a bit, I got a mysterious error.
 
-なんやこら。。。
+What kind . .
 
-ちなみにこれは入力した文字数分だけでてきます。
+By the way, it comes only for the number of characters I enter.
 
-謎のエラー。
+Mystery error.
 
-```
-Uncaught SyntaxError: Unexpected token ILLEGAL
-```
+    Uncaught SyntaxError: Unexpected token ILLEGAL
 
-でも、他の開発者では再現しない。
+However, it is not reproduced by other developers.
 
-これはもしや自分の開発環境が原因か、と思いググってみるとこんな記事が。
+Replacing Nginx's configuration with Apache,
+I rewrote the httpd.conf file like following.
 
-[http://qiita.com/ariarijp/items/ab1b4cee634893b89a37](http://qiita.com/ariarijp/items/ab1b4cee634893b89a37)
+    EnableSendfile off
 
-今回、プログラミング言語はPHPを使用しての開発だったので、
-他の方々はMAMPを入れてましたが、
-自分はVirtualBoxで環境を作っていました。
+Then I restarted Apache.
+Safely error has been resolved.
 
-そのせいでこのようなエラーが起きてしまっていたようです。
-
-Nginxの設定をApacheに置き換えて、
-httpd.confのファイルを書き直しました。
-
-```
-EnableSendfile off
-```
-
-[http://qiita.com/KoriCori/items/29c827b4f9879206cc75](http://qiita.com/KoriCori/items/29c827b4f9879206cc75)
-
-その後Apacheを再起動したら無事復活。
-
-めちゃめちゃ気持ち悪いエラーだったw
-
-謎の・でググったりしても何も出ず苦しんだw
-他の人の環境で再現しないときは自分の環境を疑うようにしよう。
+It was a very bad error.
