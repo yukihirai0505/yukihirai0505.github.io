@@ -5,41 +5,33 @@ date:   2016-09-30 13:09:43 +0900
 categories: Development
 ---
 
-今回は自分のサーバーに無料SSLを導入してみました。
+This time I tried introducing free SSL to my server.
 
-## ますはオレオレで練習
+## Free SSL settings with LetsEncrypt
 
-まずはオレオレの証明書で導入の練習してみました。
+I set up an open source free certificate.
 
-[http://qiita.com/duke-gonorego/items/afbbcd7044d3da178723](http://qiita.com/duke-gonorego/items/afbbcd7044d3da178723)
+Here it was very easy.
+I proceeded with reference to the following articles for introduction procedures.
 
-これで指定のURLにアクセスしたら良い感じにオレオレでした。
+[How To Secure Nginx with Let's Encrypt on CentOS 7](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-centos-7)
 
-## LetsEncryptで無料SSL設定
+After that,
+I could access it with https.
 
-これで導入のイメージはつかめたので、
-次はオープンソースの無料証明書を設定してみます。
+## Remarks of LetsEncrypt
 
-こちら非常にお手軽でした。
-導入手順は下記の記事を参考に進めました。
+However, if it is a free certificate,
+there are things that restrict the use by using the API,
+and care should be taken because the number of updates is frequent.
 
-[http://tech.mof-mof.co.jp/blog/letsencrypt.html](http://tech.mof-mof.co.jp/blog/letsencrypt.html)
+The validity period of SSL / TLS server certificate issued by Let's Encrypt CA is short term (90 days).
+At least, we need to renew the certificate once every three months.
 
-これでアクセスすれば良い感じにhttpsでアクセスできます。
-
-## LetsEncryptの注意点
-
-ただ、無料証明書だとAPIで使用で使用を制限しているものがあったり、
-更新回数が頻繁だったりするので注意が必要です。
-
-> Let's Encrypt CA が発行する SSL/TLS サーバ証明書の有効期間は、短期間（90日間）です。
-> 少なくとも、3か月に一回は、証明書の更新を行なう必要があります。
+[https://letsencrypt.org/2015/11/09/why-90-days.html](https://letsencrypt.org/2015/11/09/why-90-days.html)
 
 
-[https://letsencrypt.jp/docs/using.html](https://letsencrypt.jp/docs/using.html)
-
-
-また、短期間に更新しすぎると制限がかかってしまうこともあるそうです。
+Also, there seems to be a limitation if updating too much in a short period of time.
 
 ```
 Rate limit on registrations per IP is currently 10 per 3 hours
@@ -49,4 +41,5 @@ Rate limit on certificates per Domain is currently 5 per 7 days
 [https://community.letsencrypt.org/t/public-beta-rate-limits/4772](https://community.letsencrypt.org/t/public-beta-rate-limits/4772)
 
 
-ただ、無料でSSLが設定できて気持ちがいい(笑)ので手軽に導入したい人にはオススメです^^
+However, I recommend LetsEncrypt for people who want to introduce ssl for free
+because it is easy to set SSL :)
