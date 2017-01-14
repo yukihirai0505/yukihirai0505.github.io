@@ -1,161 +1,118 @@
 ---
 layout: post
-title:  "初心者はJSHint(ESLint/GJSLint)を使って綺麗なJavascriptを書けるようにしよう。"
+title:  "Beginners will be able to write beautiful Javascript using JSHint (ESLint / GJSLint)"
 date:   2016-10-02 13:09:43 +0900
 categories: Development
 ---
 
-僕みたいなJS初心者は、
-ゴリゴリJSを書いていると動くところまではいったものの
-コードを見返してみると斬新(?)な書き方になっていることが多いです。(僕だけでしょうか。)
+A beginner like Javascript like me,
+after seeing the code after continuing to write Javascript,
+it is often a strange way of writing. (Is it only me?)
 
-そこで今回、変な書き方してると指摘してくれるツールを教えて頂いたのでそちらを導入してみました。
+So I'll write about the tools that point out that we are strangely writing.
 
-その名もJSHintです。
-今回は調子に乗ってESLintとGJSLintも使っているのでそちらも合わせて見ていきます。
+It is JSHint.
+I will also explain about ESLint and GJSLint.
 
-## JSHintとは
+## What is JSHint?
 
-まずJSHintについて見ていきます。
-JSHintとは、
-> JSHintとは、Javascript用構文チェッカーです。
-構文チェッカーとしては、かなり厳しめのチェックをしてくれるJSLintがありますが、
-これをforkして融通効くようにしたものがJSHintです。
-[Developers.IO](http://dev.classmethod.jp/tool/jshint-javascript-sublime-text2/)より引用)
+> JSHint is a static code analysis tool used in software development for checking if JavaScript source code complies with coding rules.
+It was forked from Douglas Crockford's JSLint project,
+as it was felt that the original did not allow enough customization options.
+qt: [JSHint](https://en.wikipedia.org/wiki/JSHint)
 
-つまり、JSHintを使用すれば、
-自分の書いてるJavascriptをチェックしてくれるのです。
 
-インストールするのにはNode.jsが必要なので、忘れずにインストールしておきましょう。
+So if you use SHint, 
+that helps to check Javascript source code.
 
-インストールできたらコマンドラインから
+Node.js is necessary to install, so do not forget to install it.
+From the command line 
 
-```
-npm install -g jshint
-```
+    npm install -g jshint
 
-これでjshintをインストールできます。
-
-インストールできたら適当にJSHintの設定ファイル(.jshintrc)をホームディレクトリで作成しましょう。
+After installing it,
+let's create the JSHint configuration file (.jshintrc) in your home directory like following.
 
 {% gist yukihirai0505/a2c3c589365dc8b09828 %}
 
-ひとまずこのくらいでいいかと思います。
-他にもいろいろ見てみたい方はこちらのサイトから確認できます。
+You can check more configuration.
+
 [http://jshint.com/docs/](http://jshint.com/docs/)
 
-ひとまずこれでJSHintをインストールできたので
-
-コマンドラインから
+From the command line
 
 ```
-jshint [jsファイル]
+jshint [javascript file]
 ```
 
-みたいな感じで叩いてあげれば
+You can see like following logs.
 
 > jquery.js: line 232, col 0, Identifier 'core_slice' is not in camel case.
 jquery.js: line 238, col 18, Expected '===' and instead saw '=='.
 jquery.js: line 277, col 0, Identifier 'core_slice' is not in camel case.
 
-こんな感じでチェックしていけてないところを教えてくれます。
+## When using JSHint with Vim
 
-## JSHintをVimとかSublimeText2で使用する場合
+Since it is annoying to run jshint on command line every time, I set it with Vim.
 
-いちいちコマンドラインでjshintを叩くのは面倒臭いので、
-VimとSublimeText2で設定してみました。
+### Setting for Vim
 
-##Vimの場合
+In the case of Vim, you can add a plug-in.
+NeoBundle is useful for managing plugins, so I use it here.
 
-まずVimの場合ですが、
-
-プラグインを入れていきます。
-プラグインの管理にはNeoBundleが便利なので、こちらを使用しています。
-
-NeoBundleのインストールはこんな感じでどうぞ
+Install NeoBundle like this
 
 {% gist yukihirai0505/d00f9cd3c9622f26ab5d %}
 
-次にホームディレクトリで.vimrcファイルを設定しましょう。
+After installing it, let's set up `.vimrc` file.
 
 {% gist yukihirai0505/20fdf1edb42f44a90037 %}
 
-ここまでできたらまずはシンタックスチェック系のこちらのプラグインをインストールします。
+Next, install this plugin of syntax check system.
 
 ```
 NeoBundle 'scrooloose/syntastic'
 ```
 
-これを設定ファイルに追加していきます。
-
 {% gist yukihirai0505/e76108e927581c1d1b93 %}
 
-これでVimを開いたらscrooloose/syntasticをインストールするかどうか聞かれるのでインストールしておきましょう。
-
-次に.vimrcファイルに設定を追加していきます。
+Now that you open Vim you will be asked if you want to install scrooloose / syntastic and install it.
+Next, you should set up `.vimrc` again.
 
 {% gist yukihirai0505/a8a8fcbfbc560d1db1ec %}
 
-ひとまずこんな感じで設定してあげればVimで編集するときにJSHintの構文チェックが動いてくれます。
-この場合はファイル開くときとかセーブするときとか構文チェックが走ってくれます。
-ちょっとうざいかもしれませんのでそこらへんはお好みで設定をどうぞ！
+If you set it like this,
+JSHint syntax check will work when editing with Vim.
+In this case, the syntax check runs when opening a file or saving.
+It may be a little bit annoying, so please go ahead and set your preferences.
 
-## SublimeText2でJSHintを使用したい場合
+## How to instsall ESLint and GJSLint
 
-次にSublimeText2でJSHintを使用する場合について見ていきます。
-まずは[Package Control](https://packagecontrol.io/installation)をインストールしてください。
+ESLint has the same function as JSHint,
+and analysis rules are completely pluggable,
+so you can add your own rules freely.
 
-インストールできたら、
-
-`コマンド+Shift+pで"Package Control: Install Package"`
-を選択します。
-そこでSublimeLinerをインストールしましょう。
-
-これでインストールが完了すれば、
-次回からセーブ時にJSHintが動いてくれます。
-
-## 調子に乗ってESLintとかGJSLintも入れてみた
-
-今回は、ESLintとGJSLintもインストールして使ってみてます。
-ESLintについてはここを見るとわかりやすいです。
-
-[ESLintについてのメモ](http://qiita.com/makotot/items/822f592ff8470408be18)
-
-上記の記事にもありますが、
-
-ESLintはJSHint同等の機能を持つ他、
-解析ルールが完全にプラガブルになっているので、
-独自ルールを自由に追加できるという特徴があります。
-
-JSHintと同じく
+To install it,
 
 ```
 npm install -g eslint
 ```
 
-でインストールします。
+Next, GSLint is a tool that can check / modify according to the Google JavaScript Style Guide.
 
-次にGSLintですが、
-こちらは
-Google JavaScript Style Guideに則ってチェック・修正を行えるツールです。
-
-インストールは
+To install it,
 
 {% gist yukihirai0505/8d1e623bfa62edeecb9c %}
 
-これでオッケーです。
 
-あとはVimに設定を追加してあげれば使用できます。
+After that, you should set up `.vimrc` file.
 
 {% gist yukihirai0505/b99e30b2ccb83ab40ee0 %}
 
-これでオッケーです。
 
-ちなみにVimでファイルを編集しているときに、
+By the way, when you edit a file with vim, the following command helps to check your environment.
 
 `:SyntasticInfo`
-
-としてあげれば
 
 ```
 Syntastic version: 3.6.0-156 (Vim 703, Darwin)
@@ -167,7 +124,4 @@ Available checkers: eslint gjslint jshint
 Currently enabled checkers: eslint jshint gjslint
 ```
 
-こんな
-感じで今動いているものなどを確認できます。
-
-是非、構文チェックツールで脱"斬新な書き方"を目指していきたいものです。
+I would like to aim for beautiful Javascript code with syntax checking tool.
