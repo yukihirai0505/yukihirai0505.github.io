@@ -41,7 +41,7 @@ Here is the point.
 And then, you can use a following command.
 It is simple.
 
-`fab [execute method]`
+    fab [execute method]
 
 To explain this file a little.
 You can see that lcd() and local() are used for local processing.
@@ -52,7 +52,7 @@ To run the command on the remote server, use run().
 
 We can leave the deployment process with this Fabric.
 
-`Fab deploy`
+    fab deploy
 
 This command is just simple.
 It is very convenient.

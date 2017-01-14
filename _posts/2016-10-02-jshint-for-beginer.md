@@ -41,9 +41,7 @@ You can check more configuration.
 
 From the command line
 
-```
-jshint [javascript file]
-```
+    jshint [javascript file]
 
 You can see like following logs.
 
@@ -70,9 +68,7 @@ After installing it, let's set up `.vimrc` file.
 
 Next, install this plugin of syntax check system.
 
-```
-NeoBundle 'scrooloose/syntastic'
-```
+    NeoBundle 'scrooloose/syntastic'
 
 {% gist yukihirai0505/e76108e927581c1d1b93 %}
 
@@ -94,9 +90,7 @@ so you can add your own rules freely.
 
 To install it,
 
-```
-npm install -g eslint
-```
+    npm install -g eslint
 
 Next, GSLint is a tool that can check / modify according to the Google JavaScript Style Guide.
 
@@ -112,16 +106,15 @@ After that, you should set up `.vimrc` file.
 
 By the way, when you edit a file with vim, the following command helps to check your environment.
 
-`:SyntasticInfo`
+    :SyntasticInfo
 
-```
-Syntastic version: 3.6.0-156 (Vim 703, Darwin)
-Info for filetype: javascript
-Global mode: active
-Filetype javascript is active
-The current file will be checked automatically
-Available checkers: eslint gjslint jshint
-Currently enabled checkers: eslint jshint gjslint
-```
+    Syntastic version: 3.6.0-156 (Vim 703, Darwin)
+    Info for filetype: javascript
+    Global mode: active
+    Filetype javascript is active
+    The current file will be checked automatically
+    Available checkers: eslint gjslint jshint
+    Currently enabled checkers: eslint jshint gjslint
+
 
 I would like to aim for beautiful Javascript code with syntax checking tool.

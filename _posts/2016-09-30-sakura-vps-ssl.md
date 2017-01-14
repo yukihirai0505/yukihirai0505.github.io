@@ -33,10 +33,8 @@ At least, we need to renew the certificate once every three months.
 
 Also, there seems to be a limitation if updating too much in a short period of time.
 
-```
-Rate limit on registrations per IP is currently 10 per 3 hours
-Rate limit on certificates per Domain is currently 5 per 7 days
-```
+    Rate limit on registrations per IP is currently 10 per 3 hours
+    Rate limit on certificates per Domain is currently 5 per 7 days
 
 [https://community.letsencrypt.org/t/public-beta-rate-limits/4772](https://community.letsencrypt.org/t/public-beta-rate-limits/4772)
 
