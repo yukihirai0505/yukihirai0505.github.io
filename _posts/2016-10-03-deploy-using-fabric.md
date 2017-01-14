@@ -5,6 +5,8 @@ date:   2016-10-03 13:09:43 +0900
 categories: Development
 ---
 
+Today I will explain how to use Fabric for deploy.
+
 ## What is Fabric
 
 Fabric is

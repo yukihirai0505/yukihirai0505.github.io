@@ -1,91 +1,62 @@
 ---
 layout: post
-title:  "gulpでPostCSSを使用してみる"
+title:  "How to use PostCSS with gulp"
 date:   2016-10-10 13:09:43 +0900
 categories: Development
 ---
 
-今回、同じ会社のエンジニアにgulpについて教えてもらったので、
-忘れないように記事に残しておこうと思います。
+Today I will explain how to use PostCSS with gulp.
 
-
-## gulpとは
-
-gulpとは[公式サイト](http://gulpjs.com/)を見てみると次のような説明があります。
+## What is Gulp
 
 > Automate and enhance your workflow
+qt: [Official page](http://gulpjs.com/)
 
-つまり、作業を自動化してくれたり効率的にしてくれるものです。
-なんとなくフロントエンドまわりのタスクを自動化してくれるツール、
-という認識はあったのですが特に使用してこなかったので実際に使うのは初でした。
-フィリピンにいたときに、フィリピンのエンジニアにその存在を聞いてはいたのですが。笑
+In other words,
+it automates the work and makes it efficient.
+Although I was aware that it was a tool that automates the tasks around the front end somehow
+it was the first time to actually use it.
 
-懐かしい。笑
-実際使ってみて思ったのは
-
-***「もっと早く使っとけばよかった」*** です。笑
-
-Node.jsとnpmを使うのでこれらを環境に入れて使います。
-
-インストールなどは公式のドキュメントをみて進めるのがいいかと思います。
+It is required that Node.js and npm are already installed on your develop environment.
+I think that it is better to proceed with installation by checking the official documentation.
 
 →[Getting Started](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md)
 
-## PostCSSを使ってみる
+## How to use PostCSS
 
-今回はPostCSSを使用してベンダープレフィックスを自動で付与するautoprefixer、
-現在策定段階でブラウザが未実装のCSSの記法を、
-今のブラウザが解釈できるようにトランスパイルするcssnext
-入れ子でCSSを記述できるようになるpostcss-nested
-ミックスインを使用するためのpostcss-mixins、
-CSSで変数がつかえるようになるpostcss-simple-vars、
-CSSをスペースや改行などを除いて縮小してくれるcssnanoなどを使用していきたいと思います。
+This time I will use the following in PostCSS.
 
-ちなみにこれらはnpmでモジュールをインストールする必要があります。
+- autoprefixer => Automatically grant vendor prefix
+- cssnext => Transform the CSS notation that the browser is not yet implemented at the present stage so that the current browser can interpret it
+- postcss-nested => You can write CSS nested
+- postcss-mixins => to use mixins
+- postcss-simple-vars => CSS makes variables available
+- cssnano => CSS will be reduced except for spaces and line breaks
+
+They need to install the module by using npm.
 
 {% gist yukihirai0505/2b03c9a41ce052252976 %}
 
-## gulpfile.jsの記述
+## To set up gulpfile.js
 
-今回は下記のような感じでgulpfile.jsを記述してみました。
+I set up `gulpfile.js` like following.
 
 {% gist yukihirai0505/1375aeb81fcfe1d8514f %}
 
-これで今回インストールしたモジュールを使用することができます。
+I will execute for the css file of this path.
 
-今回は
+    src/**/*.css
 
-`src/**/*.css`
-
-こちらのパスのcssファイルを対象に実行しています。
-
-cssの中身はそれぞれのモジュールを使ってみたかったのでこんな感じで記述してみました。
+The content of css file is following.
 
 {% gist yukihirai0505/f7af05c87363e82621cb %}
 
-これでgulpを実行すると
-
-こんな感じで生成してくれました。
+After running gulp
 
 {% gist yukihirai0505/2ef05756187d0e4968e8 %}
 
-CSSで入れ子ができたり、変数が使えるようになると
-かなり楽に記述していくことができます。
-またベンダープレフィックス自動でつけてくれるとか、、、
-なんて有難いんでしょう。
-いちいち[CanIuse](http://caniuse.com/)で調べなくても良くなりそうですね。
-
-他にもgulpにはwatchでファイルを監視してタスクを自動実行したりとか、
-
-gulp-webserverを使用してlivereloadなどもできます。
-面倒な処理を手軽に請け負ってくれるgulp、、、最高ですね。
-
-ちなみにQiitaでも記事を書いてみました。
-
-→[gulpで複数タスクの実行順序を指定したい場合](http://qiita.com/yukihirai0505/items/0e390514e780ef77342a)
-
-ありふれてる簡単な内容なのでストックゼロです。笑
-ただ、コメントしていただいた情報から
-gulp4.0のドキュメントを見てみたんですが
-gulpは今後もどんどん使いやすくなっていきそうです。
-もうgulpから目が離せませんね。
+When nesting and variables become available we can describe CSS considerably comfortably.
+Also it is very pleasant to attach vendor prefix automatically.
+It seems to be good even if you do not investigate every time at [CanIuse] (http://caniuse.com/).
+In addition to gulp you can monitor files with watch to automatically execute tasks, livereload etc. using gulp - webserver, and so on.
+Gulp that handles troublesome processing easily is the best.
