@@ -1,64 +1,52 @@
 ---
 layout: post
-title:  "SNSから送るメッセージをLambda経由でSlackへ"
+title:  "Message sent from SNS to Slack via Lambda"
 date:   2016-10-01 13:09:43 +0900
 categories: Development
 ---
 
-開発者向けのエラーメッセージを、SNSを使用して開発者のメーリス宛に送っていたのですが、
-「Slackでも受け取りたいよね。」
-ということで、Slackで受け取れるようにしました。
+I was sending error messages to developer's mail list by SNS.
+But, I also want to receive it with Slack.
+So I made it available for Slack.
 
-ちなみにSNSというのはAWSのサービスで、
-正式名称をAmazon Simple Notification Serviceといいます。
+By the way SNS is a service of AWS,
+The official name is called Amazon Simple Notification Service.
 
-[https://aws.amazon.com/jp/sns/](https://aws.amazon.com/jp/sns/)
+[https://aws.amazon.com/sns/](https://aws.amazon.com/sns/)
 
-## Slackに通知するまで流れ
+## How to send error messages to Slack
 
-下記のQiitaの記事でわかりやすく流れを説明してくださってます。
+The Flow is following.
 
-[http://qiita.com/tmtysk/items/7161b11e20ac5e2dfc01](http://qiita.com/tmtysk/items/7161b11e20ac5e2dfc01)
+- To create Incoming WebHooks with Slack
+- To create Lambda
+- Test
+- Collaboration with SNS
 
-この流れに沿って
+## To create a function in Lambda and test it
 
-- SlackでIncoming WebHooksを作成
-- Lambdaの作成
-- テスト
-- SNSで連携
+First, entering the AWS console, select Lambda, then click "Create a Lambda Function".
+Skip the next blueprint.
+Next, select NodeJS for language and write code.
 
-といった感じになります。
-
-## Lambdaでfunctionを作成してテスト
-
-上記の記事に補足する形で説明すると、
-まずはAWSコンソールに入ってLambdaを選択後
-"Create a Lambda Function"をクリックします。
-次にblueprint選んでねと言われますが、ここはSkip
-次に言語はNodeJSを選んでコードを記述していきます。
-
-コードに関しては、Qiitaの記事で紹介されているコードでうまくいかない場合があるかもしれません。
-その場合は、
-自分が書いたものをGistにあげたのでこちらを試してみていただくといいかもしれません。
+Regarding the code, I gave Gist what I wrote, so it may be a good to try this.
 
 {% gist yukihirai0505/0af52c9c98cc998a10a3 %}
 
-基本、うまくいかない場合はLog見ながらデバッグしていけばだいたい解決するかと思います。
-自分は最初そのまんまコピペしたら下記のエラーがでたりしたので、
-console.logとかをうまく使いながらオブジェクトの中身確認していけば大丈夫かと思います。
+Basically,
+if not going well, I'd like to solve it if I debug while watching Log.
+I think that it is okay if you check the contents of the object while using console.log etc. well.
 
-- Process exited before completing request
-- SyntaxError: Unexpected token a at Object.parse (native)
+After creating it, let's test.
+We should choose SNS for TEST.
 
-作成できたら次はテストをしていくのですが、
-TESTをする際はSNSを選択します。
-これでうまくいけば、Slackに通知が行きます。
+## Collaboration with SNS
 
-## SNSで連携
+Next, select Topics from SNS and create a Subscription for Lambda you want to designate as a destination this time.
+In that case,
+if you designate the Lambda Endpoint created this time,
+it is all right to complete the collaboration.
 
-次にSNSからTopicsを選択して、
-今回送り先に指定したいLambda用のSubscriptionを作成します。
-その際に今回作成したLambdaのEndpointを指定してあげれば無事連携完了です。
-
-連絡ツールが複数になると、
-こっちもあっちもチェックで大変ですがSlackで受け取れるものはSlackに通知してあげると手軽に一箇所で確認できていいですね。
+When there are multiple contact tools,
+it is too hard to check this out,
+but what you can receive with Slack can be easily checked in one place if you notify Slack.
