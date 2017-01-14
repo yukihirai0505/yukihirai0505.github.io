@@ -1,85 +1,59 @@
 ---
 layout: post
-title:  "Fabricで幸せなデプロイライフ"
+title:  "Happy Deploy Life with Fabric"
 date:   2016-10-03 13:09:43 +0900
 categories: Development
 ---
 
-自分のサーバでは現時点で、
-Playframework2.4JavaとScalaがそれぞれ動いていて
-デプロイを自動化する際にfabricを使用したので備忘録も兼ねてここに記します。
+## What is Fabric
 
-## Fabricとは
+Fabric is
 
-Fabricは
+- A tool to execute arbitrary ***Python function*** via the command line.
+- A library of subroutines (built on low-level libraries) ***easily via SSH*** and ***execute Python-like*** shell command.
 
-- コマンドライン 経由で 任意の <strong>Python 関数</strong> を実行するツールです。
-- (低レベルライブラリの上に構築された)サブルーチンのライブラリで、SSH経由で***簡単に***かつ***Python風に***シェルコマンドを実行します。([概要とチュートリアルFabric ドキュメント](http://fabric-ja.readthedocs.org/ja/latest/tutorial.html)より引用)
-
-つまり、このFabricを使えばいちいちサーバーに手動でアクセスして
-作業せずともデプロイのようなタスクを自動化できるのです！
-
-例えば下記のようにyum_updateというメソッドを作成したファイルを用意します。
+Fabric can automate the deployment work.
+You do not have to manually access and work on the server each time.
+For example, I wrote a file that created a method called yum_update as shown below.
 
 {% gist yukihirai0505/cd46406c76e578c6d773 %}
 
-そうするとこのメソッドを次のように叩くことができます。
+And then, you can use this file like a following command.
 
 {% gist yukihirai0505/f7e4057692bf980f0c61 %}
 
-これを叩けばリモートサーバー上でsudo yum updateを実行してくれるのです！
+## Setting for Fabric
 
-## Fabricの設定
-
-上記のコマンドではユーザ名,sshの秘密鍵,ホスト名を指定して
-コマンドを叩いていますが、
-これはファイル上に書いておくこともできます。
-今回、自分のサーバー対して作ったものを簡単にしたものが下記になります。
+In the above command,
+We can run the command by specifying the user name, secret key of ssh, host name.
+However, they can also be written on a file.
+This time, what I made for my server is as follows.
 
 {% gist yukihirai0505/5964130f78d6fc09414e %}
 
-ここの下記の部分で設定を書いておくことができます。
 
-```
-env.hosts = ['ホスト名']
-env.user = 'ユーザー名'
-env.key_filename = '鍵の場所'
-```
+Here is the point.
 
-そうすることで
+    env.hosts = ['host name']
+    env.user = 'user name'
+    env.key_filename = 'key file path'
 
-`fab [実行したいメソッド]`
+And then, you can use a following command.
+It is simple.
 
-このようにシンプルにコマンドを叩くことができます。
+`fab [execute method]`
 
-この中身を見ていくと、
+To explain this file a little.
+You can see that lcd() and local() are used for local processing.
+We are sending files on the remote server with put().
+To run the command on the remote server, use run().
 
-サーバー上の処理だけでなくローカルでもコマンドを叩いて
-ファイルの圧縮をしてくれているのがわかります。
+## Deployment Automation happiness
 
-ローカル上での処理には
-lcd()や
-local()を使用しているのがわかります。
+We can leave the deployment process with this Fabric.
 
-ローカルで圧縮したファイルを
-put()
-でサーバー上に送っています。
+`Fab deploy`
 
-またサーバー上でも動いているプロセスを止めたり、
-ビルドコマンドを走らせたりといったこともできます。
-
-基本サーバ上でコマンド叩く場合は
-run()
-を使用しています。
-
-## デプロイ自動化の幸せ
-
-このFabricを使えばデプロイ処理をお任せできます。
-上記のファイルでいくと
-
-`fab deploy`
-
-たったこれだけのコマンドです。
-めちゃめちゃ便利ですね。
-
-皆さんもFabricを使用して幸せなデプロイライフを送ってみてください^^
+This command is just simple.
+It is very convenient.
+Everyone can spend a happy deployment life by using Fabric :)
