@@ -1,96 +1,77 @@
 ---
 layout: post
-title:  "CometとAkka Actorを使用してサーバーから定期的にブラウザにPushする"
+title:  "How to push regularly to the browser from the server using Comet and Akka Actor"
 date:   2016-10-04 13:09:43 +0900
 categories: Development
 ---
 
-今回は個人的にPlayframework2.4を使用して
+I tried the method of regularly pushing the browser from the server with Comet × Akka Actor using Playframework 2.4,
+so I will summarize it.
 
-Comet × Akka Actorでサーバーから定期的にブラウザPushする方法を試したので簡単にまとめてみます。
+In order to place emphasis on periodically performing browser push,
+I will implement it as simple as possible.
 
-定期的にブラウザPushを行うことに重点を置くため、
-できる限りシンプルに実装していきます。
+## What is Comet
 
-## Cometとは
+Comet is a WEB application model that keeps requests for long periods of time after sending requests to the server or until server events occur.
+To put it briefly, it can push information from the server to the client.
 
-Cometとはリクエストをサーバーに送信後タイムアウト、またはサーバイベントが発生するまで
-長時間リクエストを存続させておくWEBアプリケーションモデルです。
-すごく簡単に言えば、サーバーからクライアントに情報をpushできるものです。
+You can check more detail on a following link.
+[https://en.wikipedia.org/wiki/Comet_(programming)](https://en.wikipedia.org/wiki/Comet_(programming))
 
-詳しくはこちらをどうぞ
+## What is Akka Actor
 
-↓
+Parallel processing can be implemented using Akka Actor.
 
-[https://ja.wikipedia.org/wiki/Comet](https://ja.wikipedia.org/wiki/Comet)
+You can check more detail on a following link.
+[http://doc.akka.io/docs/akka/current/general/actors.html](http://doc.akka.io/docs/akka/current/general/actors.html)
 
-## Akka Actorとは
 
-Akka Actorは並列処理のためのもので、
-詳しくはこちらのスライドで紹介されています。
+## How to implement
 
-- [http://www.slideshare.net/sifue/akka-39611889](http://www.slideshare.net/sifue/akka-39611889)
-- [http://www.slideshare.net/TakamasaMitsuji/ss-13626473?related=1](http://www.slideshare.net/TakamasaMitsuji/ss-13626473?related=1)
+The flow is following.
 
-今回はCometからのpushを繰り返し行うために使用しています。
+- ① Implementation of User (It is not necessary to be a User)
+- ② Implementation of Actor
+- ③ Implementation of Controller
+- ④ Implementation of View
 
-## 実際に実装してみる
+## Implementation of User (It is not necessary to be a User)
 
-流れとしては
-
-- ①Userの実装(別にUserでなくても良い)
-- ②Actorの実装
-- ③Controllerの実装
-- ④Viewの実装
-
-といった感じになります。
-
-## Userの実装(別にUserでなくても良い)
-
-まずはカウントをもつUserを作成します。
-本来はここにちゃんとしたmodelのUserを置きたいところですが、今回はめちゃめちゃさっぱりにします。
+First, I created User class that has counts.
 
 {% gist yukihirai0505/ce75b97f80d4fab1a803 %}
 
-## Actorに渡す用のクラスを作成
+### Creating class fot Actor
 
-次にCometオブジェクトをもつActorに渡す用のクラスを作成します。
+Next to create a class to pass to the Actor with Comet object.
 
 {% gist yukihirai0505/2d3d4774cd89b7c57fc9 %}
 
-## Actorの実装
-
-次にActorを実装します。
+## Implementation of Actor
 
 {% gist yukihirai0505/87a9fc69c9b5d85e8f7f %}
 
-## Controllerの実装
-
-ここまで出来たら次はControllerを実装していきます。
+## Implementation of Controller
 
 {% gist yukihirai0505/7d4e68839f8f32baf340 %}
 
-
-## Viewの実装
-
-最後にviewを作成してあげます。
+## Implementation of View
 
 {% gist yukihirai0505/ddb872a3a4a35d51461d %}
 
-これで
-forever iframeによりサーバーからpushがある度にiframeの中身が書き換わって
+With the forever iframe,
+the content of the iframe will be rewritten each time there is push from the server.
+
+The point is following source code.
 
 {% gist yukihirai0505/cb0718222b0c27f8be12 %}
 
-ここの部分でブラウザを動的に書き換えています。
+## Summary
 
-## まとめ
+By applying these,
+it is possible to create a chat or to keep the user waiting until the value of the table changes.
 
-これらを応用すればチャットが作れたり、
-テーブルの値が変更するまでユーザーを待機させておくなんていうことが可能になります。
-
-Githubのコードもあるので良かったらどうぞ！
+Github is here.
 
 [https://github.com/yukihirai0505/comet_actor](https://github.com/yukihirai0505/comet_actor)
-
-変なところがあればプルリクもお待ちしてます^^
