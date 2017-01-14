@@ -1,181 +1,147 @@
 ---
 layout: post
-title:  "仕事でMySQLを使い始めて知っとけばよかったなと思うこと"
+title:  "Things I think I should have known about using MySQL at work"
 date:   2016-10-06 13:09:43 +0900
 categories: Development
 ---
 
-今までORMに頼り切りであまりSQLをどっぷり触る機会がなかったのですが
-ここ2~3週間でSQLを触る機会が前の1000倍ほど増えたので備忘録も兼ねてMySQLについて書いていきます。
-もともとSQL自体はエンジニアになる前から書いてはいたんですが、その頃知らなかったかなり基本的なところも書いていくので、SQL中・上級者の方は何も得るものはないかと思います。笑
-むしろ、アドバイス頂けると嬉しいです！
+Until now I have not had the opportunity to touch SQL as much as I can depend on ORM,
+but since the opportunity to touch SQL has increased about 1,000 times in the last couple of weeks,
+I also write about MySQL as a memorandum.
+Originally I wrote SQL itself before I became an engineer,
+but I will write some pretty basic things I did not know at that time,
+so I think that anyone in the middle of SQL will get nothing. lol
+Rather, I'm happy if you give me any advice :)
 
-## 簡単なSQLの書き方
+## Writing simple SQL
 
-### テーブル名は短く別名をつける
+### To use alias to be simple the table name
 
-これは個人によって違うかもしれませんが、
-user uなどのようにテーブル名は省略して書いています。
+This might be different for individuals,
+but if you omit the table name as `user u`, it will be easier to maintain.
 
 {% gist yukihirai0505/f2771898c7ad7bb6e9ff %}
 
-といった具合です。
-こう書いておくと後から見返したりチューニングする時もすっきりしているので良いですね。
+By doing this,
+it is easy to see it when you look back and tune afterwards and it is neat.
 
-## CASE式
+## CASE expression
 
-このCASE式も結構使います、条件によって表示するものを変えたいとかいった場合に使用したりします。
+It is used to change what to display depending on conditions.
 
 {% gist yukihirai0505/695025bc2df53ff2e213 %}
 
-といった書き方もできます。
+### How to sort by multiple conditions using ORDER BY
 
-### ORDER BYを使用して複数条件で並び替えする方法
+    ORDER BY s.start_date desc, s.id desc
 
+### GROUP BY also specifies multiple conditions like ORDER BY
 
-`ORDER BY s.start_date desc, s.id desc`
+    GROUP BY s.start_date desc, u.id
 
-### GROUP BYもORDER BY同様に複数条件を同時に指定
-
-`GROUP BY s.start_date desc, u.id`
-
-### 部分置換
+### Partial replacement
 
 {% gist yukihirai0505/749deecc8fb6f9909817 %}
 
-## チューニング編
+## Tuning edition
 
-最適化するべきクエリはスロークエリログやクエリアナライザで見付けられます。
-ここのブログで紹介されてるやり方で、
-スロークエリの設定が確認できます。
+Queries to be optimized are found in slow query logs and query analyzers.
 
-[Mysql slow queryの設定と解析方法](http://d.hatena.ne.jp/masayuki14/20120704/1341360260)
+[http://stackoverflow.com/questions/22609257/how-to-enable-mysql-slow-query-log](http://stackoverflow.com/questions/22609257/how-to-enable-mysql-slow-query-log)
 
-MySQLをbrewで入れている場合は
+If you installed MySQL by Homebrew,
+You can check find conf file by using a following command.
 
-`ls $(brew --prefix mysql)/support-files/my-*`
+    ls $(brew --prefix mysql)/support-files/my-*
 
-とかでファイルを確認してみて、そこにあれば
+And then, you can set up `my.cnf` file
 
-`sudo cp $(brew --prefix mysql)/support-files/my-default.cnf /etc/my.cnf`
-
-とかでコピーしておくのが良いです。
-
-ここで上がってきたクエリーは要チューニングです。
+    sudo cp $(brew --prefix mysql)/support-files/my-default.cnf /etc/my.cnf
 
 ### EXPLAIN
 
 
-データのチューニングで使用するEXPLAINは、
-クエリーの前にEXPLAINと付け加えれば、その実行結果を表にして示してくれます。
-ただ、初見でこの表を見てもあまり何を言っているかわからないかと思います。
+EXPLAIN used for data tuning adds EXPLAIN before the query and shows the execution result in a table.
+However, I think that you can not understand the contents much by looking at this table at first look.
 
-このEXPLAINの結果に関しては、
-次のブログで詳しく紹介されています。
-[MySQLのEXPLAINを徹底解説!!](http://nippondanji.blogspot.jp/2009/03/mysqlexplain.html)
-表の各項目についても上記のブログで紹介されてますが、ひとまずチェックしたい部分としてtypeのカラムがあります。
+So you should remember an important thing that is `type` column.
 
-typeの部分が、
-indexまたはALLの場合はチューニングの余地がありそうです。
-
-そこからALLのものは
-場合によってですが、対象カラムにインデックスを貼ってあげるなどすると良いです。
+If type part is index or ALL, there seems to be room for tuning.
+From there, ALL's are optional, but it is good to put an index on the target column.
 
 {% gist yukihirai0505/2234462dc5858e2c27b9 %}
 
-<h2>◯◯分単位でログを集計したいなど</h2>
+<h2>When you want to compile logs in xxxx minutes</h2>
 
 {% gist yukihirai0505/a8c1e31ec1d453e868d4 %}
 
-SETで変数を指定できます。
+It is good to first `SET` Something to be used repeatedly.
 
-繰り返し使用するようなものは最初にSETしておくと良いですね。
-ちなみに
+    UNIX_TIMESTAMP
 
-`UNIX_TIMESTAMP`
+=> It converts the date to unixtime (UTC's number of elapsed seconds since 01:00:00 on January 1, 1970).
 
-日付をunixtime(UTCの1970年1月1日0時0分0秒からの経過秒数)に変換してくれる。
+    FROM_UNIXTIME
 
-`FROM_UNIXTIME`
+=> A function that can return the time stored in unixtime in an appropriate format.
 
-unixtimeで格納されている時間を適当なフォーマットで返すことのできる関数。
-です！
+## How to sort with UNION
 
-## UNIONでのソート編
-
-AのテーブルとBのテーブルをUNIONする時、
-Bのテーブル内でorder byをしていても反映されないことがあります。
-Bのテーブル内でソートしたものを更にセレクトして別テーブルで定義すればソートが効いた状態でUNIONできます。
+When you UNION a table of A and a table of B,
+it may not be reflected even if you order by within the table of B.
+If sorting in the table of B is further selected and defined in another table,
+we can do UNION with sorting in effect.
 
 {% gist yukihirai0505/f30095bd5d907e49ef2a %}
 
-## トランザクションの理解
+## Understanding Transactions
 
-> トランザクションとは、複数のユーザーが同時にデータベースを操作する状況において、データベースに対する複数の操作(選択、更新、削除)などを実行している途中で仮にエラーが発生したとしても、データの不整合が起きないことを保証するリレーショナルデータベースシステム(RDBMS)のメカニズムです。
-詳しくは下記がわかりやすいので参照してみてください！
+In a situation where a plurality of users operate the database at the same time,
+a transaction is a data inconsistency even if an error occurs temporarily while executing a plurality of operations (selection, update, deletion) or the like on the database
+It is a mechanism of a relational database system (RDBMS) that guarantees nothing.
 
-[トランザクションでデータの不整合を防ぐ](http://www.atmarkit.co.jp/ait/articles/0210/24/news001.html)
 
 ### SELECT...FOR UPDATE
 
-トランザクションで、
-SELECT FOR UPDATEクエリーを用いると、トランザクション終了までSELECTされた行に対して排他ロックが適用されます。
+With a SELECT FOR UPDATE query in a transaction, an exclusive lock is applied to the row SELECTed until the end of the transaction.
 
-## CSVファイルのインポート
+## How to import data to Mysql from CSV file
 
-このCSVファイルのインポートにはいくつかトラップがありました。
-まず、DBに読み込みたいCSVデータを用意します。
-次に、MySQLに入っていくのですが、
-入るときに
+First, you should use `--local_infile` option to import csv file.
 
-`mysql --local_infile=1 -uroot -p`
+    mysql --local_infile=1 -uroot -p
 
-で、 `--local_infile` をONにしてあげます。
+If you forget the option,
+you will have a following error.
 
-これを忘れると、
+    ERROR 1148 (42000): The used command is not allowed with this MySQL version
 
-```
-ERROR 1148 (42000): The used command is not allowed with this MySQL version
-```
-
-みたいなエラーが出ることがあります。
-
-次に、
+And then,
 
 {% gist yukihirai0505/76fff4aa6a4ada62be0c %}
 
-としてあげます。
+However, depending on the file there is a CR line feed code.
+In that case, importing with this will cause only one row to be imported.
+So, if you convert the line feed code from CR to LF, it solves it.
+Although it is good to convert with your text editor, let's use it because there is a useful command called nkf command.
 
-ただ、ファイルによっては改行コードがCRのものがあります。
-その場合これでインポートすると、1行分しかインポートされないということが起こりえます。
-なので改行コードをCRからLFに変換すれば解決します。
-お使いのテキストエディタで変換するのもいいですが、
-nkfコマンドという便利なコマンドがあるのでそちらを使用しましょう。
-Macの方は
+If you are using Mac, you can install it by using a following command.
 
 `brew install nkf`
 
-とかでサクッとインストールしちゃいましょう。
+You can convert line feed code from `\r` to `\n`.
 
-次にnkfを使用して対象ファイルがCRもしくはCR+LFの改行コードだった場合は、
+`nkf -Lu [target file] > [after file name]`
 
-`nkf -Lu [対象ファイル] > [変換後のファイル名]`
+Once conversion is completed, I think that all file's rows can be imported properly.
 
-これでオッケーです。
-これで変換すると改行コードが `\r` から `\n` に変換されているのがわかります。
+## How to insert the selected result
 
-便利ですね。
-変換が完了すればそのファイルはちゃんと全件インポートできるかと思います。
+It is also useful.
 
+[MySql insert the results of a select](http://stackoverflow.com/questions/4472929/mysql-insert-the-results-of-a-select)
 
-## selectした結果をinsertする
+## Summary
 
-これも便利なので是非知っておきたい。
-
-[selectした結果をinsertする](http://qiita.com/ques0942/items/acfdd5382c638580ce0b)
-
-## 最後に
-
-まだまだMySQL知らないことばかりで、
-効率が悪いものを書きがちですが
-少しでも良いSQLが書けるように努めていきます。
+I still have nothing to know about MySQL and I write a badly informative SQL.
+I will try to be able to write a little better SQL.
