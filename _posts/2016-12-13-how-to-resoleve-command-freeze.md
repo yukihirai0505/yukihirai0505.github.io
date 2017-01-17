@@ -1,39 +1,37 @@
 ---
 layout: post
-title:  "コマンド(yumなど)を実行したときにフリーズするときの対処法"
+title:  "How to deal with a problem that freezing when executing command (yum, etc.)"
 date:   2016-12-13 12:00:00 +0900
 categories: Development
 ---
 
-今回は
+Today, I will explain how to deal with a problem when executing command like following.
 
 - `yum install perl-Switch perl-Sys-Syslog perl-LWP-Protocol-https`
 - `yum search hogehoge`
 - `yum clean all`
 
-などのようにコマンドを実行しても何も表示されずにフリーズしてしまう場合の対処法をメモしておきます。
+## Check the log
 
-## ログの確認
- 
-まずはログを確認してみます。
+Let's first check the log.
 
-`/var/log/yum.log` の確認
-特にエラーはなし。
+`/var/log/yum.log`
 
-## 再現
+## Test whether to reproduce
 
-今回のフリーズするという事象が再現するかコマンドを実行してみる。
+Let's try to execute the command to reproduce the event of freezing.
 
 `yum install perl-Switch perl-Sys-Syslog perl-LWP-Protocol-https`
-確かにうんともすんとも言わない
 
-→ (仮定)yumコマンドでDLすら始まらないので、ロックがかかってるんじゃないか？
+If it freezes, 
 
-## プロセスの確認
+→ (Assumption) Since the DL does not begin with the yum command, is not it locked?
+
+## Check the process
 
 `ps -ax | grep yum`
 
-yumプロセスが複数ある。
+There are multiple yum processes.
 
 ```
 18787 ?        S      0:00 /usr/bin/python /bin/yum install perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https
@@ -42,19 +40,21 @@ yumプロセスが複数ある。
 28032 pts/10   S+     0:00 /usr/bin/python /bin/yum install perl-Switch perl-Sys-Syslog perl-LWP-Protocol-https
 ```
 
-→ ロックがかかって後発が動いてない
+→ Lock is applied and the sequelae do not move
 
-## プロセスのkill
+## Kill the process
 
-試しにプロセスNoが若い順からkillして止める。
-再度yum実行
-→ 通る
+Try to kill process no. From the youngest to stop.
+=> Run yum again
+=> It may go through
 
-## 原因
+## Check the cause
 
-おそらく
+Probably
 
-- 初回のyum実行時に落ちた
-- 容量の問題で正しくDL・インストールできなかった
+- Falls during initial yum execution
+- DL can not install properly due to capacity problem
 
-のではないかと思われます。
+It seems to have been frozen for the reasons mentioned above.
+
+This problem solving process seems to be applicable when other problems occur.
