@@ -1,51 +1,50 @@
 ---
 layout: post
-title:  "ディスク容量がいっぱいのときの即時対処"
+title:  "When you want to recover quickly when the disk capacity is full"
 date:   2016-12-14 12:00:00 +0900
 categories: Development
 ---
 
-今回はディスク容量がいっぱいになって
-システムダウンしているとき即時対処について
-メモしておきます。
+In this case,
+when the disk capacity becomes full and the system is down, record about immediate actions.
 
-## ディスク容量がいっぱいでシステムダウンするとき
+## When the disk capacity is full and the system goes down
 
-ディスク容量がいっぱいになるとシステムに以上を来して
-ダウンすることもあります。
-これが本番の環境なら緊急性が高いのですぐに復旧したいところです。
+When the disk capacity becomes full, the system may go down.
+If this is a production environment it is highly urgent so I'd like to recover quickly.
 
-今回は根本の解決というより即時復旧の対応について記載してみます。
+This time I will describe the response of immediate recovery
+rather than solving the fundamental problem.
 
-## どのdirがいっぱいになているのかを確認する
+## Check which dir is full
 
-まずは `du -sh` コマンドでどのdirectoryが容量を食っているのかを確認します。
+First of all, we should check which directory is using capacity with `du -sh` command.
 
-## 対象ディレクトリのファイルを確認
+## Check the files in the target directory
 
-対象ディレクトリのファイルの確認してerror.logなどがあれば中身を見るようにしましょう。
-プログラムのエラーとかではなくログが大量に吐き出されているなどの場合は
-一度システムを再起動してみます。(苦肉の策)
+Check the file in the target directory and check the contents if there is error.log etc.
+If there is a lot of logs expired with some error,
+restart the system once,
+save the target log to another server and delete it from the target server.
+And then, lighten the disk capacity as much as possible.
 
-あとは不要なファイルを削除するなどしてディスクの容量を軽くしてあげます。
+## Precautions for system down
 
-## とりあえずの予防策
+- Install log rotation
+- Configure disk space alerts
 
+For AWS, you can set alert of disk capacity in CloudWatch with custom setting.
+The following article is helpful.
 
-- ログローテートをいれる
-- ディスク容量のアラートを設定する
+- [Monitoring Memory and Disk Metrics for Amazon EC2 Linux Instances](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/mon-scripts.html)
 
-AWSの場合はカスタム設定で、CloudWatchにディスク容量のアラートを設定することができます。
-下記記事が参考になります。
+If you run for the first time,
+it may be that some perl modules are missing and it may not work,
+so let's check the error log for proper installation.
 
-- [AWS CloudWatchでディスク容量チェック - Septeni Engineer's Blog](http://labs.septeni.co.jp/entry/20141212/1418321528)
-
-初めて実行する場合はいくつかperlのモジュールが足りなくてうまくいかないことがあるかもしれないので、
-足りないものはエラーログをみて適宜インストールしていきましょう。
-
-また、 `install Crypt::SSLeay` のテストがうまくいかないことがありますが、
-TESTをNOにすればいけるそうです。←
-あまりよろしくなさそうですが。笑
+Also, the `install Crypt :: SSLeay` test may not work,
+but it seems that you can set TEST to NO. ←
+I do not think so well. lol
 
 [How to Force Install a Perl Module using CPAN](http://www.thegeekstuff.com/2013/06/cpan-force-install-perl-module)
 
