@@ -1,111 +1,108 @@
 ---
 layout: post
-title:  "SQLアンチパターン クエリのアンチパターン"
+title:  "SQL anti-pattern Query anti-pattern"
 date:   2016-11-05 12:00:00 +0900
 categories: Development
 ---
 
-本日もSQLアンチパターンを読んだので、
-出てきた用語やアンチパターンを一部抜粋してまとめてみます。
+Today I read the SQL anti-pattern,
+so I will extract some of the terms and anti-patterns that I came out and summarize.
 
-## ①フィア・オブ・ジ・アンノウン(恐怖のunknown)
+## ①Fear of the Unknown
 
-NULLを一般値として使う、または一般値をNULLとして扱うというアンチパターン
+An anti-pattern that uses NULL as a general value or treats a general value as NULL
 
-### デメリット
+### Demerit
 
-- NULLはゼロと同じではないため文字列とNULLを連結するとNULLが返る
-- 検索時にunknownが返る
-- プレペアドステートメントでパラメータ化したSQLでNULLを一般値のように扱うのが困難
+- Since NULL is not the same as zero, concatenating a string with NULL returns NULL
+- unknown will be returned when searching
+- Difficult to handle NULL like general value in SQL parameterized with prepared statement
 
-### アンチパターンを用いてもいい場合
+### When we can use anti-pattern
 
-NULLを用いること自体がアンチパターンなのではない。
-NULLを一般地として使用したり、一般値をNULLに相当するものとして扱うことがアンチパターン。
+Using NULL itself is not an anti-pattern.
+It is an anti-pattern that NULL is used as a general place or general value is treated as equivalent to NULL.
 
-## ②アンビギュアスグループ(曖昧なグループ)
+## ②Ambiguous group
 
-非グループ化列を参照するというアンチパターン
+An anti-pattern that refers to a non-grouping column
 
-### デメリット
+### Demerit
 
-- 単一値の原則(Single-Value Rule)
-- SQLがクエリの意図を組んでくれるとは限らない...別の列に対してMAX関数が使われているからどの `bug_id` を出力したいのかをSQLが適切に判断してくれるだろう
+- Single-Value Rule
+- SQL does not always make the intent of the query ... Since the MAX function is used for another column, SQL will properly judge which `bug_id` you want to output
 
-#### 子メモ
+#### Small note
 
-クエリ就職誌にDISTINCTキーワードを使うとクエリ結果の行を減らしてすべての行を一意にすることができる。
+Using the DISTINCT keyword for query qualifiers reduces the rows in the query result and makes all rows unique.
 
-### アンチパターンを用いてもいい場合
+### When we can use anti-pattern
 
-MySQLとSQLite
-では単一値の原則に違反する列に対する結果の信頼性を保証できない。
+MySQL and SQLite can not guarantee the reliability of results against columns that violate the single value principle.
+We should try to use unambiguous columns.
 
-曖昧ではない列を使用するようにすべき。
+## ③Random selection
 
-## ③ランダムセレクション
+An anti-pattern that sorts data randomly.
 
-データをランダムにソートするというアンチパターン。
+### Demerit
 
-### デメリット
+- Sorting by non-deterministic expression (RAND function) can not get the benefit from the index
+- If indexes can not be used, the table must be sorted manually by query results (table scan) index is much slower than sorting
 
-- 非決定性をもつ式(RAND関数)によってソートを行うということは、インデックスからメリットを得られない
-- インデックスを使用できない場合には、テーブルはクエリ結果を手作業でソートしなければならず(テーブルスキャン)インデックスを用いたソートよりもはるかに遅くなる
+### When we can use anti-pattern
 
-### アンチパターンを用いてもいい場合
+When the data set is small
 
-データセットが小さい場合
+## ④Poorman's Search Engine
 
-## ④プアマンズ・サーチエンジン(貧者のサーチエンジン)
+Anti-pattern to use pattern match terminology.
 
-パターンマッチ術語を使用するというアンチパターン。
+### Demerit
 
-### デメリット
+- Scan all rows of table because you can not get the benefits of the index
+- Unintended match occurred
 
-- インデックスのメリットを得られないためすべてのテーブルの行をスキャン
-- 意図しないマッチが生じる
+### When we can use anti-pattern
 
-### アンチパターンを用いてもいい場合
+If you use it correctly for simple applications you can get great value.
+Using pattern matching terminology for complex queries faces difficulties.
 
-シンプルな用途に対して正しく使用すれば大きな価値を得られる。
-複雑なクエリのためにパターンマッチ術語を使用すると困難に直面する。
+As a solution use appropriate tools such as full text search engines.
 
-解決策としては全文検索エンジンのような適切なツールを使用する。
+- MySQL full text index
+- Text index in Oracle
+- Full text search on Microsoft SQL Server
+- Text search in PostgreSQL
+- Full text search (FTS) in SQLite
+- Third party search engines
 
-- MySQLのフルテキストインデックス
-- Oracleでのテキストインデックス
-- Microsoft SQL Serverでの全文検索
-- PostgreSQLでのテキスト検索
-- SQLiteでの全文検索(FTS)
-- サードパーティのサーチエンジン
+## ⑤Spaghetti Query
 
-## ⑤スパゲッティクエリ
+Anti-pattern to solve complicated problems in one step
 
-複雑な問題をワンステップで解決しようとするアンチパターン
+### Demerit
 
-### デメリット
+- Unintended result ... *** Cartesian product *** arises. It is created when two tables specified in a query do not have conditions to restrict association. Combining the two tables makes each row of one table pair with all the rows of the other table
+- It is difficult to describe, modify, and debug queries
+- Cost increase at runtime
 
-- 意図に反した結果... ***デカルト積(Cartesian product)*** が生じる。クエリで指定する2つのテーブルが関連を制限する条件をもたないときに生まれる。2つのテーブルを結合することによって、1つのテーブルの各行がもう1つのテーブルのすべての行とペアになってしまう
-- クエリの記述や修正、デバッグが難しくなる
-- 実行時のコスト増
+### When we can use anti-pattern
 
-### アンチパターンを用いてもいい場合
+If the report's requirements are too complicated to achieve with a single SQL query, it is better to create multiple reports.
 
-レポートの要件が1つのSQLクエリで実現するにあまりにも複雑な場合は、
-レポートを複数作成する方が良い。
+## ⑥implicit column
 
-## ⑥インプリシットカラム(暗黙の列)
+Software developers do not like to hit a lot of keys.
+Specifying all column names in SQL queries tends to avoid using wildcards.
 
-ソフトウェア開発者はキーをたくさん打つことを好まない。
-SQLクエリですべての列名を指定するようなことはワイルドカードを使用することで避けがち。
+An anti-pattern that falls into a shortcut trap.
 
-ショートカットの罠に陥るというアンチパターン。
+### Demerit
 
-### デメリット
+- There is a possibility that performance and scalability may be adversely affected
 
-- パフォーマンスとスケーラビリティに悪い営業を及ぼす可能性がある
+### When we can use anti-pattern
 
-### アンチパターンを用いてもいい場合
-
-アドオックなSQLを素早く描きたい場合には妥当。
-できる限り列名は明示的に指定すべき。
+It is reasonable when you want to draw ad hoc SQL quickly.
+Column names should be specified explicitly whenever possible.
