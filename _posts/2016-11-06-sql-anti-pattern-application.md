@@ -1,152 +1,149 @@
 ---
 layout: post
-title:  "SQLアンチパターン アプリケーションのアンチパターン"
+title:  "SQL anti-pattern Application's anti-pattern"
 date:   2016-11-06 12:00:00 +0900
 categories: Development
 ---
 
-本日もSQLアンチパターンを読んだので、
-出てきた用語やアンチパターンを一部抜粋してまとめてみます。
+Today I read the SQL anti-pattern,
+so I will extract some of the terms and anti-patterns that I came out and summarize.
 
-## ①リーダブルパスワード(読み取り可能パスワード)
+## ①Readable password
 
-パスワードを平文で格納するというアンチパターン。
+An anti-pattern that registered passwords in plaintext.
 
-### デメリット
+### Demerit
 
-- 安全ではない...攻撃者がパスワードを盗むチャンスがいくつも発生
+- Not secure ... there are several opportunities for an attacker to steal passwords
 
-### アンチパターンを用いてもいい場合
+### When we can use anti-pattern
 
-アプリケーションが外部のサービスにアクセスするためのクライアント側になる場合のパスワードも
-できるだけ暗号化すべき。
+The password when the application becomes the client side for accessing the external service should also be encrypted as much as possible.
+Insert a password hash with salt. (irreversible)
 
-ソルトをつけてパスワードハッシュを格納する。(不可逆)
+## ②SQL injection
 
-## ②SQLインジェクション
+An anti-pattern that executes unauthenticated input as a code.
+SQL Injection occurs by dynamically inserting a string in the SQL query string by modifying the syntax of the query in a manner not intended by the developer.
 
-未認証の入力をコードとして実行するというアンチパターン。
-SQLインジェクションはSQLクエリ文字列に動的に挿入された文字列が、開発者の意図していない方法でクエリの構文を改変することによって生じる。
+### Demerit
 
-### デメリット
+- If executed without a syntax error it will result in unintended results
+- The impact when SQL is modified is immeasurable
 
-- 構文エラーにならずに実行された場合意図しない結果になる
-- SQLが改変されたときの影響は計り知れない
+### When we can use anti-pattern
 
-### アンチパターンを用いてもいい場合
+There is no reason to justify
 
-正当化する理由はない
+- Input filtering
+- parameterization of dynamic values, use of p repaired statements
+- Isolate user input from code
+- Review among developers
 
-- 入力のフィルタリング
-- 動的値のパラメータ化,pリペアドステートメントの使用
-- ユーザーの入力をコードから隔離
-- 開発者館でのレビュー
+We should take measures such as SQL injection measures.
 
-などなどSQLインジェクション対策行うべき。
+## ③Pseudokey Neat-Freak (pseudo key Family disease)
 
-## ③シュードキー・ニートフリーク(擬似キー潔癖症)
+An anti-pattern that fills the gap
+When you find a missing line, many people think that they want to fill it naturally.
 
-隙間を埋めるというアンチパターン
-欠けている行をみつけたとき、多くの人はそれを自然に埋めたいと考える。
+- assign missing numbers
+- Renumber existing business
 
-- 欠番を割り当てる
-- 既存業に番号を振り直す
+### Demerit
 
-### デメリット
+- Inefficient and error prone
+- cause a race condition
+- Source of data inconsistency
 
-- 非効率でエラーを招きやすい
-- 競合状態を引き起こす
-- データ不一致の元
+### When we can use anti-pattern
 
-### アンチパターンを用いてもいい場合
+There is no reason to justify changing the pseudo key value.
+Do not fill in the missing numbers.
 
-擬似キー値の変更を正当化する理由はない。
-欠番は埋めない。
+## ④Sea · No Evil (lid on smell)
 
-## ④シー・ノー・エビル(臭いものに蓋)
+Reasonable reason to write concise code
 
-簡潔なコードを書くという合理的な理由
+- Application coding can be done in less time
+- Code to be tested, documented, peer reviewed decreases
+- Because there are few codes, the possibility of bug contamination is reduced
 
-- より短時間でアプリケーションのコーディングを行える
-- テスト、文書化、ピアレビューの対象となるコードが減る
-- コードが少ないので、バグが混入する可能性も少なくなる
+Anti-pattern to overlook the essential part
 
-肝心な部分を見逃すというアンチパターン
+- Ignore the return value of the database API
+- I only read the scattered SQL in the application code
 
-- データベースAPIの戻り値を無視
-- アプリケーションコード内に点在するSQLしか読まない
+Developers miss the information they can easily obtain.
 
-開発者は簡単ん入手できる情報を見逃してしまう。
+### Demerit
 
-### デメリット
+- Judge without diagnosis
+- Simple mistakes such as no space are often overlooked
 
-- 診断せずに判断する
-- スペースがないなどの単純なミスを見逃しがち
+### When we can use anti-pattern
 
-### アンチパターンを用いてもいい場合
+Error checking can be omitted for plums that do not need to do anything for errors.
+For example, although the close function of the database connection returned status,
+If the application itself is in the process of terminating, resources for connection are also considered to be cleaned up.
 
-エラーに対してまったく何もする必要がない梅にはエラーチェックを省略できる。
-例えばデータベースコネクションのclose関数がステータスを返したものの、
-アプリケーション自身が終了の途中ならば、接続のためのリソースもクリーンアップされると考えられる。
+## ⑤Diplomatic Immunity
 
-## ⑤ディプロマティック・イミュニティ(外交特権)
+Follow best practices
 
-ベストプラクティスに従う
+- Version control of source code using tools such as Subversion and Git
+- Automate and execute unit tests and functional tests
+- Write documentation, specifications, code comments and record application requirements and implementation strategies
 
-- SubversionやGitなどのツールを用いて、ソースコードのバージョン管理を行う
-- ユニットテストや機能テストを自動化し、実行する
-- ドキュメント、仕様書、コードコメントを書き、アプリケーションの要件や実装戦略を記録する
+Anti-pattern that treats SQL specially.
+We tends to think that these practices are exempt especially for database code.
 
-SQLを特別扱いするというアンチパターン。
-データベースコードではこれらの慣行が免除されると考える傾向がある。
+### Demerit
 
-### デメリット
+- Many unnecessary work and repeated work occur
 
-- 多くの不要な仕事や繰り返し作業が発生する
+### When we can use anti-pattern
 
-### アンチパターンを用いてもいい場合
+We should address quality issues comprehensively.
 
-包括的に品質問題に取り組むべき。
+## ⑥Magic Beans
 
-## ⑥マジックビーンズ(魔法の豆)
+The anti-pattern that MVC's model is the active record itself.
+A mapping such as a CRUD operation is called an active record.
 
-MVCでいうモデルがアクティブレコードそのものというアンチパターン。
+### Demerit
 
-CRUD操作のようなマッピングをアクティブレコードと呼ぶ。
+- Active Records makes models depend heavily on database schema ... Number of tables = Code implementation to communicate with models as well as the number of models
+- Publish the CRUD function
+- Domain Model Causes anemia ... Coding of business logic that does not have behaviors other than CRUD method is required
+- Difficult unit test of Magic Beans
 
-### デメリット
+### When we can use anti-pattern
 
-- アクティブレコートはモデルをデータベーススキーマに強く依存させる...テーブルの数=モデルの数 だけでなく、モデルとのやりとりを行うためのコード実装
-- CRUD機能を公開してしまう
-- ドメインモデル貧血症をもたらす...CRUDメソッド以外の振る舞いをもたない ビジネスロジックのコーディングが必要になる
-- マジックビーンズのユニットテスト困難
+The active record itself is convenient.
+However, technical debt is generated by coding at the time of prototype creation.
+The time to refactor code should be incorporated in the schedule beforehand to reduce the debt.
 
-### アンチパターンを用いてもいい場合
+## ⑦Sand castle
 
-アクティブレコード自体は便利。
-ただ、プロトタイプ作成時のコーディングによって技術的負債が生じる。
-負債を減らすためにコードのリファクタリングを行う時間をあらかじめスケジュールに組み込んでおくべき。
+Anti-pattern of lack of assumption.
 
-## ⑦砂の城
+The problem is that the assumption of what happens and measures to deal with each event are not sufficiently examined.
+In order to operate the service stably, it is necessary to assume that trouble will occur naturally.
+Just assuming is not enough, and it is necessary to consider what action should be taken when an event actually occurs during operation.
 
-想定不足というアンチパターン。
+- Stop machine
+- Transaction failure
+- Response policy when performance problems or failures occur
 
-問題は、どのようなこと起きるかという想定と
-それぞれの事象への対策が十分に検討されていないこと。
-サービスを安定稼働させるには、トラブルは当然起きるものとして想定しておく必要がある。
-想定しただけでは不十分で、実際に運用時に事象が起きた時にどのような対応をするべきかといった検討も必要。
+### Demerit
 
-- マシンの停止
-- トランザクションの失敗
-- 性能問題や障害が発生したときの対処ポリシー
+- Expansion of damage
 
-### デメリット
+### When we can use anti-pattern
 
-- 被害の拡大
-
-### アンチパターンを用いてもいい場合
-
-仕組みや体制を考えるのは時間のかかる作業。
-どこまでお金や手間をかけられるかは、そのシステムが停止することでどれだけの損失があるか
-もしくは事業計画に影響があるか、
-どの程度の停止期間なら許容できるかといったことを考慮して検討する必要がある。
+It is a time-consuming task to think about the structure.
+It is necessary to consider how much money and effort can be put in consideration of the following.
+- How much loss will it have with the system going down?
+- Does the project plan have an impact?
+- How long is the suspension period acceptable?
