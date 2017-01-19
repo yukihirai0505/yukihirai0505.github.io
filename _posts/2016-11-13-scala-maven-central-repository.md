@@ -1,55 +1,51 @@
 ---
 layout: post
-title:  "Scalaで作成したライブラリをMavan Central Repositoryに登録する手順"
+title:  "How to register a library made by Scala to the Maven Central Repository"
 date:   2016-11-13 12:00:00 +0900
 categories: Development
 ---
 
-今回は自分で作成したLibraryをMaven Central Repositoryに登録したので、
-その手順についてまとめておきたいと思います。
+Today, I'd like to explain how to register a library made by Scala to the Maven Central Repository.
+I use sbt (ver 0.13).
 
-今回はsbt(ver 0.13)を使用して設定などを記述していきます。
+## Introduction
 
-## はじめに
+I created Scala API Wrapper for Instagram named sInstagram.
+Since other Scala API Wrapper content was old, I made it myself.
 
-今回はScalaでsInstsagramというInstagramのAPI Wrapperを作成致しました。
-他のScala製のAPI Wrapperの内容が古かったりしたので、
-作ってしまいました。
+How to register a library to Maven Central Repository is like the following procedure.
 
-Maven Central Repositoryへの登録手順は簡単に下記のようになります。
+- Create a Scala library and push to Github
+- Create an account with Sonatype JIRA
+- Application for project at Sonatype JIRA
+- Create and register keys with the GPG
+- Fix build.sbt
+- Deploy to Sonatype OSSRH
+- Released on Sonatype OSSRH
 
-- Scalaライブラリの作成してGithubにpush
-- Sonatype JIRA でアカウントの作成
-- Sonatype JIRA でプロジェクトの申請
-- GPGで鍵の作成とサーバーへの登録
-- build.sbtを修正
-- Sonatype OSSRHにデプロイ
-- Sonatype OSSRHでリリース
+The following link is very helpful.
 
-ほとんど下記のURLで説明されてますが、build.sbtの部分だけ異なるのでここでは
-そこに絞って書いておいます。
-
-=> [GitHub で公開したソースコードを Maven Central Repository に登録する手順](https://blog.tagbangers.co.jp/2015/02/27/to-register-the-source-code-that-was-published-in-github-to-maven-central-repository)
 
 - [GPG](https://gpgtools.org/)
 - [Sonatype](https://issues.sonatype.org/secure/Dashboard.jspa)
+- [Publishing](http://www.scala-sbt.org/0.13/docs/Publishing.html)
 
-## build.sbtでMavan Central Repositoryへの登録
+## Using build.sbt to register a library to Maven Central Repository  
 
-build.sbtでのデプロイ作業は下記のURLが参考になります。
+The following URL is helpful for the deployment work in build.sbt.
 
 - [Deploying to Sonatype](http://www.scala-sbt.org/0.13.1/docs/Community/Using-Sonatype.html)
 
-まず必要なライブラリをScalaのプロジェクトに追加します。
+First add the necessary libraries to Scala's project.
 
-`./project/plugins.sbt` ファイルに下記ライブラリを追加します。
+Let's edit this file `./project/plugins.sbt` 
 
 ```
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "0.2.1")
 ```
 
-次に `~/.sbt/0.13/sonatype.sbt` ファイルに
+And then edit this file `~/.sbt/0.13/sonatype.sbt` 
 
 ```
 credentials += Credentials("Sonatype Nexus Repository Manager",
@@ -58,11 +54,7 @@ credentials += Credentials("Sonatype Nexus Repository Manager",
     "password")
 ```
 
-ファイルを作成します。
-
-あとは
-
-`./build.sbt` ファイルを編集してあげます。
+After that, edit this file `./build.sbt` 
 
 ```
 import SonatypeKeys._
@@ -117,16 +109,16 @@ pomExtra :=
   </developers>
 ```
 
-ここまで設定してGPGの鍵の登録も済んでいればあとは
+If you set up so far and have registered GPG key, then
+you should run `sbt` command.
 
-`sbt` コマンドを入力して
+Let's not forget to register keys created with GPG on the server.
 
-GPGで作成した鍵をサーバーに登録しておくのは忘れないようにしておきましょう。
+You can deploy with `publishSigned` on sbt console.
 
-`publishSigned` コマンドを実行すればデプロイ完了します。
-
-自分が出くわしたエラーで役立ったリンクなどをここに書いておきます。
-GPGの鍵がうまく登録できなかったためにデプロイしたプロジェクトのcloseの際にエラーがでてcloseできませんでした。
-また、 `orgranization` で指定しているpackage nameと申請しているプロジェクトのGroupIdが異なっている場合releaseの際にエラーになることがあります。
+I write in here links etc. that helped me with errors encountered.
+Because I could not successfully register the key of GPG,
+I could not close it with an error when closing the project that I deployed.
+Also, if the package name specified in `orgranization` is different from the GroupId of the project you are applying to, you may get an error on release.
 
 - [No public key: Key with id: (XXXXX) was not able to be located (oss.sonatype.org)](http://stackoverflow.com/questions/19462617/no-public-key-key-with-id-xxxxx-was-not-able-to-be-located-oss-sonatype-org)
