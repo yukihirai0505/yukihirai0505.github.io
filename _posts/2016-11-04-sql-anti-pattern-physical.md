@@ -1,94 +1,94 @@
 ---
 layout: post
-title:  "SQLアンチパターン データベース物理設計のアンチパターン"
+title:  "SQL anti-pattern Anti-pattern of database physical design"
 date:   2016-11-04 12:00:00 +0900
 categories: Development
 ---
 
-本日もSQLアンチパターンを読んだので、
-出てきた用語やアンチパターンを一部抜粋してまとめてみます。
+Today I read the SQL anti-pattern,
+so I will extract some of the terms and anti-patterns that I came out and summarize.
 
-## ①ラウンディングエラー(丸め誤差)
+## ①Rounding error
 
-FLOATデータ型を使用するというアンチパターン
-FLOAT型を効果的に使用するには、その浮動小数点数の特徴を理解しておく必要がある。
+An anti-pattern to use the FLOAT data type
+In order to effectively use the FLOAT type, it is necessary to understand the characteristics of the floating point number.
 
-### デメリット
+### Demerit
 
-- 丸めが避けられない
-- 浮動小数点数の誤差累積は和ではなく積を計算する場合さらに大きくなる
+- Rounding is inevitable
+- Floating-point error cumulative is even greater when calculating the product instead of the sum
 
-### アンチパターンを用いてもいい場合
+### When we can use anti-pattern
 
-- 科学技術計算を行うアプリケーション
+- Applications that make scientific calculations
 
-FLOATやその類似したデータ型の代わりにSQLデータ型のNUMERICまたはDECIMALを用いて、固定精度の小数点数を表すようにする。
+Instead of FLOAT and its similar data type, use NUMERIC or DECIMAL of the SQL data type to represent the fixed precision decimal point number.
 
-## ②サーティワンフレーバー(31のフレーバー)
+## ②Thirty One Flavor
 
-列に格納できる値を限定された値に制限することは有用。(CHECK(salutation in ('Mr', 'Ms')))
-列に無効な値が含まれていないことを保証できる。
+It is useful to limit the value that can be stored in a column to a limited value. (CHECK (salutation in ('Mr', 'Ms')))
+It can be guaranteed that an invalid value is not included in the column.
 
-限定する値を列定義で指定するというアンチパターン。
+An anti-pattern that specifies a restricted value in a column definition.
 
-### デメリット
+### Demerit
 
-- 列定義の中身を調べる手間
-- メンテナンスを怠ると同期しなくなる
-- 新しい定義の追加は頻繁に行うべきではない
-- 定義の1つを廃止する場合、過去データに影響
-- 移植が困難
+- The trouble of examining the contents of the column definition
+- If you fail to maintain it will not be synchronized
+- Adding new definitions should not be done frequently
+- If you abolish one of the definitions, affect past data
+- difficult to transplant
 
-### アンチパターンを用いてもいい場合
+### When we can use anti-pattern
 
-ENUMの採用は値セットが変わらない限りはあまり問題にならない。
+Adoption of ENUM is not a problem as long as the value set does not change.
 
-限定する値をデータで指定するという解決策。
+A solution that specifies values to be limited with data.
 
-## ③ファントムファイル(幻のファイル)
+## ③Phantom file
 
-物理ファイルの使用を必須と思い込むアンチパターン。
+An antipattern that thinks that the use of a physical file is indispensable.
 
-### デメリット
+### Demerit
 
-- ファイルの削除時における問題...「孤児」となったファイルが蓄積
-- トランザクション分離の問題
-- ロールバックジに置ける問題
-- DBのバックアップツール使用時における問題
-- SQLアクセス権限使用時における問題...外部ファイルにはGRANTやREVOKEなどのSQLステートメントで割り当てるアクセス権限が適用されない。
-- ファイルはSQLデータ型ではない
+- Problems when deleting files ... Files that became "orphans" accumulate
+- Transaction isolation problem
+- Problems that can be placed in rollback
+- Problems when using DB backup tool
+- Problems when using SQL access authority ... Access rights assigned by SQL statements such as GRANT and REVOKE are not applied to external files.
+- File is not SQL data type
 
-### アンチパターンを用いてもいい場合
+### When we can use anti-pattern
 
-画像のようなデータサイズの大きいオブジェクトをデータベース外部のファイルに格納すること。
+Storing objects with large data sizes such as images in files external to the database.
 
-- DBの容量を減らせる
-- バックアップが短時間で終了
-- 画像ファイルがDB外にあればプレビューや編集が容易
+- Reduce DB capacity
+- Back up quickly
+- Easy preview and editing if the image file is outside the DB
 
-これらのメリットがプロジェクトにとって重要であり問題点も深刻ではない場合。
-ただ、常に2つの設計を検討すべき。
-必要に応じてBLOB型を採用する。
+When these merits are important to the project and problems are not serious.
+However, we should always consider two designs.
+The BLOB type is adopted as necessary.
 
-## ④インデックスショットガン(闇雲インデックス)
+## ④Index shotgun
 
-データベースのパフォーマンスを改善する最善の方法は、 ***インデックス*** を効果的に使用すること。
-しかし、インデックスをいつ、どのように使うべきかをきちんと理解しているソフトウェア開発者は多くない。
-開発者は推測に基づいて、効果的にインデックスを使う方法を模索するしかない。
+The best way to improve database performance is to use *** index *** effectively.
+However, there are not many software developers who properly understand when and how to use indexes.
+Based on speculation, developers can only explore ways to use indexes effectively.
 
-### デメリット
+### Demerit
 
-- インデックスをまったく定義しないか、少ししかインデックスを定義しなくなる
-- インデックスを多く定義氏すぎるか役立たないインデックスを定義する
-- インデックスを活用しないクエリを実行してしまう
+- We tend to do not define an index at all or only define a few indexes
+- We tend to define a lot of indexes Define too much or not useful index
+- We tend to run a query that does not utilize indexes
 
-### 解決策
+### Solution
 
-MENTORの原則に基づいて効果的なインデックス管理を行うべき
+Effective index management should be done based on MENTOR principle
 
-- Measure(測定)...スロークエリログ
-- Explain(解析)...クエリ実行計画(Query Execution Plan: QEP)の使用
-- Nominate(指名)...インデックスを使わないでテーブルにアクセスしている箇所を探す
-- Test(テスト)
-- Optimize(最適化)...インデックスはキャッシュメモリに格納されやすくなる。キャッシュに割り当てるメモリ量の設定。
-- Rebuild(再構築)...定期的なメンテナンス
+- Measure (measurement) ... slow query log
+- Explain ... Using Query Execution Plan (QEP)
+- Nominate (nominate) ... Find a place accessing the table without using the index
+- Test
+- Optimize ... indexes are more likely to be stored in cache memory. Setting of the amount of memory allocated to the cache.
+- Rebuild (rebuild) ... regular maintenance

@@ -1,299 +1,296 @@
 ---
 layout: post
-title:  "SQLアンチパターン データベース論理設計のアンチパターン"
+title:  "SQL anti-pattern Anti-pattern of database logic design"
 date:   2016-11-03 12:00:00 +0900
 categories: Development
 ---
 
-本日もSQLアンチパターンを読んだので、
-出てきた用語やアンチパターンを一部抜粋してまとめてみます。
+Today I read the SQL anti-pattern,
+so I will extract some of the terms and anti-patterns that I came out and summarize.
 
-## ちょいちょい出てくる名言まとめ
+## Summary of quotes in this chapter
 
-> Ihr seid alle Idioten zu glauben, aus Eurer Erfahrung etwas lernen zu konnen, （諸君は自らの経験からいくらか学ぶことができるという，全く愚かな考えであろうが，）
-  ich ziehe es vor, aus den Fehlern anderer zu lernen, um eigene Fehler zu vermeiden.（余はむしろ他人の失敗を学ぶことで，自分の失敗を回避することを好む）
+> Ihr seid alle Idioten zu glauben, aus Eurer Erfahrung etwas lernen zu konnen,
+  ich ziehe es vor, aus den Fehlern anderer zu lernen, um eigene Fehler zu vermeiden.
   qt: http://okanos.com/2012/02/10202432.php
 
 > An expert is a person who has made all the mistakes that can be made in a very narrow field.
-  by ニールス・ボーア
+  by Niels Bohr
 
 > One in a million is next Tuesday
   by Gordon Letwin
 
-## ①ジェイウォーク(信号無視)
+## ①Jay Walk (signal ignored)
 
-開発者はよく「多対多」の関連を表現する ***交差テーブル*** の作成を避けるために
-カンマ区切りのリストを使用する。
-これをジェイウォーク(信号無視)と呼ぶ。
+Developers often express "many-to-many" relationships *** to avoid creating cross-cutting tables ***
+Use a comma-separated list.
+We call this Jay Walk (Ignore Signal).
 
-"intersection"(交差点/交差テーブル)を避けようとする行為だから。
+It is an act of trying to avoid "intersection".
 
-### デメリット
+### Demerit
 
-パフォーマンス低下やデータ整合性の問題
+Performance degradation and data consistency problems
 
-- 等価性による比較ができないためなんらかの文字列パターンにパターンマッチが必要
-- パターンマッチは式の書き方によって意図しない結果を返す可能性がある
-- インデックスを使用するメリットも得られない
-- 結合(JOIN)するのに手間がかかり、効率的なものにならない
-- 集約クエリ(COUNT, SUM, AVG)を使用する際に開発に時間がかかりデバッグも難しくなる
-- アカウントの更新が冗長になる
-- アカウントIDのバリデーションが難しい
-- 個々の入力値に区切り文字がある場合がやっかい
-- 長さに制限がバラバラ
+- Pattern matching is necessary for some character string pattern because comparison by equivalence is not possible
+- Pattern matches can return unintended results by writing expressions
+- I can not get the merit of using the index
+- It takes time and effort to join (JOIN) and it will not be efficient
+- When using aggregate queries (COUNT, SUM, AVG), development takes time and debugging becomes difficult
+- Account updates become redundant
+- It is difficult to validate account ID
+- It is troublesome if there is a delimiter in each input value
+- Loss restricts to length
 
-### アンチパターンを用いてもいい場合
+### When we can use anti-pattern
 
-データベース構造に ***非正規化(denormalization)*** を適用する場合
-ただし、十分な検討が必要。
-正規化されていたほうが柔軟性は高くなり、データの整合性を保つ助けにもなる。
+When applying *** denormalization *** to the database structure
+However, sufficient consideration is necessary.
+Flexibility will be higher if it is normalized and it will help to maintain data integrity.
 
-## ②ナイーブツリー(素朴な木)
+## ②Naive tree
 
-ニュースサイトで各スレッドにコメントができるような場合。
-コメントをツリー構造で表したとき
-各エントリは ***ノード*** と呼ばれる。
-ノードは1つ以上の子と、1つの親を持てる。
-親を持たない最上位のノードは根(ルート)
-子を持たない最下位のノードは葉(リーフ)
-中間のノードは非葉ノード
+When you can comment on each thread at the news site.
+When comments are expressed in a tree structure
+Each entry is called *** node ***.
+A node can have one or more children and one parent.
+The top node without parent has root (root)
+The lowest node without children has leaves (leaves)
+The middle node is a non-leaf node
 
-ツリー指向のデータ構造の代表例
+Typical example of tree-oriented data structure
 
-- 組織図
-- スレッド形式のコメント欄
+- Organization chart
+- Thread style comment field
 
-`parent_id` 列を加えるという発想だと思慮が浅い、ナイーブと言える。
-`parent_id` は同じテーブルの別の行を参照する。
+The idea of adding a `parent_id` column is inconceivable, it can be said to be naive.
+`Parent_id` refers to another row in the same table.
 
-このような設計は隣接リスト(Adjacency List)と呼ぶ。
+Such a design is called an adjacency list.
 
-### デメリット
+### Demerit
 
-- すべての子孫を取得するクエリを書くのが冗長になる
-- COUNTのような集約関数の扱いが難しくなる
-- ノードの削除の際最下層から順に削除しなければならない(ON DELETE CASCADEで自動化できるがノードの昇格や移動は自動化できない)
+- Writing queries to get all descendants becomes redundant
+- It is difficult to handle aggregate functions like COUNT
+- When deleting a node, it must be deleted from the bottom layer in order (it can be automated by ON DELETE CASCADE but node promotion and movement can not be automated)
 
-### アンチパターンを用いてもいい場合
+### When we can use anti-pattern
 
-- ノードの直近の親と子の取得のみ
-- 列の挿入が容易
+- Get nearest parent and child of the node only
+- Easy insertion of columns
 
-階層構造を持つデータに大して必要な操作がこれらのみ、といった場合は効果的。
-またSQL拡張機能を備えている製品もある。 *再帰クエリ*
+It is effective when the operation which is necessary for data having hierarchical structure is only such as.
+There are also products with SQL extension. * Recursive query *
 
-***解決案***
+***solution***
 
-代替ツリーモデルを使用
+Use alternative tree model
 
-- 経路列挙モデル(Path Enumeration)
-- 入れ子集合モデル(Nested Set)
-- 閉包テーブルモデル(Closure Table)
+- Path Enumeration model
+- Nested Set
+- Closure Table model
 
-### 経路列挙モデル(Path Enumeration)
+### Path Enumeration model
 
-隣接リストには先祖ノード取得の効率が悪い弱点がある。
-先祖の系譜を表す文字列を各ノードの属性として格納することで問題を解決する。
-`parent_id` の代わりに文字列で `path` 列を定義する。
+Adjacency list has weak point that efficiency of obtaining ancestor node is bad.
+We solve the problem by storing character strings expressing genealogies of the ancestors as attributes of each node.
+Define the `path` column with a string instead of` parent_id`.
 
-ただしジェイウォークで示した弱点がある。
-DBはパスの正確な形状や、パスの値の既存ノードへの対応を保証できない。
+However, there is a weak point indicated by Jay Walk.
+The DB can not guarantee the exact shape of the path and correspondence of the value of the path to the existing node.
 
-### 入れ子集合モデル(Nested Set)
+### Nested Set
 
-直近の親ではなく、子孫の集合に関する情報を各ノードに格納する。
-この情報は、各ノードの `nsleft` や `nsright` と呼ばれる数値で表される。
+Information on a set of descendants, not the nearest parent, is stored in each node.
+This information is expressed as a number called `nsleft` or` nsright` of each node.
 
-nsleft...そのノードより下にある階層にあるすべてのノードがもつ値より小さな値がはいる
-nsright...そのノードより下の階層にあるすべてノードがもつ値より大きな値が入る
+nsleft ... There is a value smaller than the value of all the nodes in the hierarchy below that node
+nsright ... A value larger than the value of all the nodes in the hierarchy below that node is entered
 
-入れ子構造設計の大きな長所は非葉ノードを悪女すると削除されたノードの子孫が削除されたノードの親の直接の子であると自動的に見なされる点。
-しかし入れ子構造では直近お親の取得などの隣接リストでは簡単に実行できるクエリの一部が複雑になる。
-個々のノードの操作ではなく、サブツリーに対する迅速かつ容易なクエリ実行が重要な場合に有効。
-ノードの挿入や移動は関連するノードの左右値の再計算が必要になるので複雑になる。
+A major advantage of the nested structure design is that when a virgin leaf node is virgin, the descendant of the deleted node is automatically considered to be a direct child of the deleted node's parent.
+However, in nested structures, some of the queries which can be easily executed in the adjacency list such as acquisition of the nearest parent becomes complicated.
+This is useful when quick execution of queries on subtrees is important rather than operation on individual nodes.
+Insertion and movement of nodes becomes complicated because recalculation of left and right values ​​of related nodes is required.
 
-### 閉包テーブルモデル(Closure Table)
+### Closure Table model
 
-階層構造のシンプルかつエレガントな格納方法。
-直接の親子関係だけでなく、ツリー全体のパスを格納する。
+Simple and elegant storage method of hierarchical structure.
+In addition to direct parent-child relationships, store the path of the entire tree.
 
-シンプルなcommentsテーブルに加えてtree_pathsテーブルを新たに定義する。
-tree_pathsでは先祖/子孫関係を共有するノードの組み合わせを格納する。
-ツリー上の離れた位置にあるノードも含めたすべてのノードが対象になる。
+In addition to the simple comments table, a tree_paths table is newly defined.
+Tree_paths stores combinations of nodes sharing ancestor / descendant relationships.
+All nodes including nodes at distant positions on the tree are targeted.
 
-ただ、直近の子や親へのクエリがやや複雑になる。
-しかしpath_lengthカラムを追加すれば簡単に使用できるようになる。
+However, the query to the nearest child and parent is somewhat complicated.
+But, it becomes easy to use it by adding a path_length column.
 
-## ③IDリクワイアド(とりあえずID)
+## ③ID Requirement
 
-***主キー(primary key)*** の理解。
-テーブルのすべての行が一意であることを保証するものであり、
-個々の行を扱い、行の重複を避けるために必要な論理的メカニズム、
-主キーは ***外部キー(foreign key)*** から参照されることで、テーブルの関連付けを行う。
-ある対象領域をモデル化したテーブルに、その領域で意味を持たない人工的な値を格納するには
-新たな列を追加する。
-この列を主キーとして使用することで、他の属性列には重複を許可しながら、行を一意のものとして扱えるようにする。
-***擬似キー(pseudo key)*** や ****代理キー(surrogate key)*** と呼ばれる。
+*** Understanding the primary key ***.
+It guarantees that all the rows of the table are unique,
+We deal with individual rows, the logical mechanisms necessary to avoid row duplication,
+The primary key is referenced from the *** foreign key *** to associate the table.
+To store an artificial value that has no meaning in that area in the table modeling a certain target area
+Add a new column.
+By using this column as the primary key, we allow duplication in other attribute columns, so that we can treat the line as unique.
+*** Pseudo key *** or called ****  surrogate key ***.
 
-主キーの役割
+Role of primary key
 
-- 行の重複を避けたい
-- クエリで個別の行を参照したい
-- 外部キー参照をサポートしたい
+- To avoid row duplication
+- To reference individual rows in a query
+- To support foreign key reference
 
-すべてのテーブルに「id」列を用いるというアンチパターン
+An anti pattern that uses the "id" column for all tables.
 
-### デメリット
+### Demerit
 
-- 冗長なキーが作成される...同じテーブルにある別の列が ***「自然な」主キー(ナチュラルキー)*** として使えそうな時や、UNIQUE制約を付与できそうなとき冗長になる
-- 重複行を許可してしまう...***複合キー(compound key)***は複数の列で構成されたーキー(BugsProductsテーブルの主キーはbug_idとproduct_idの組み合わせといった場合)が一意であることを保証しなければならない。しかしid列を主キーとすると組み合わせが一意であることを保証しなくなる
-- キーの意味がわかりにくくなる...idという列名は明確な意味をもたない。
-- USINGを使用する...USINGを使用する際は従属テーブル側の外部キー列には参照する主キーと同じ名前が使用できず、冗長なON構文を使用することになる。
-- 複合キーは使いにくい...単純化できるにも関わらず対象とすべき現実世界の物体を正確に表していない
+- A redundant key is created ... When another column in the same table is likely to be used as *** "natural" primary key (natural key) *** or when it is likely to be able to grant a UNIQUE constraint To be redundant
+- This might Allow duplicate rows ... *** Compound key *** is a key composed of multiple columns (in case of a combination of bug_id and product_id primary key of BugsProducts table) is unique We must ensure that there is. However, using the id column as the primary key will not guarantee that the combination is unique
+- The meaning of the key is hard to understand ... The column name id does not have a clear meaning.
+- Using USING ... When using USING, you can not use the same name as the referenced primary key for the foreign key column on the dependent table side, and use redundant ON syntax.
+- Compound keys are hard to use ... Although they can be simplified, they do not accurately represent real world objects to be targeted
 
-### アンチパターンを用いてもいい場合
+### When we can use anti-pattern
 
-一部のオブジェクトリレーショナルマッピング(ORM)フレームワークは開発をシンプルにするため
-***設定より規約(convention over configuration)*** の原則に従ってる。
-ただ、この規約を上書きすることもできるので状況に応じて適切に調整すべき。
+Some object relational mapping (ORM) frameworks to simplify development
+*** convention over configuration ***.
+However, since you can also overwrite this convention, you should adjust it accordingly.
 
+## ④Keyless entry
 
-## ④キーレスエントリ(外部キー嫌い)
+In relational database design, as important as the design of each table,
+Design of relation (relationship) between tables.
+*** Referential integrity *** is extremely important in proper database design and operation.
 
-リレーショナルデータベースの設計において、各テーブルの設計と同じくらい重要なのが、
-テーブル間の関連(リレーションシップ)の設計。
-***参照整合性*** は、適切なデータベース設計と運用において極めて重要。
+Main reason for not using referential integrity (not using foreign key)
 
-参照整合性を使用しない(外部キーを使用しない)主な理由
+- Data update conflicts with referential integrity constraints
+- Design flexibility is extremely high so support referential integrity is not available
+- Indexes created for foreign keys affect performance
+- You are using a DB product that does not support foreign keys
+- You have to look up the syntax declaring foreign keys
 
-- データの更新が参照整合性制約と衝突
-- 設計の柔軟性が極めて高いので参照整合性をサポートでkない
-- 外部キーのために作成するインデックスが、パフォーマンスに影響する
-- 外部キーをサポートしないDB製品を使用している
-- 外部キーを宣言する構文を調べなければならない
+An anti-pattern that does not use foreign key constraints.
 
-外部キー制約を使用しないというアンチパターン。
+### Demerit
 
-### デメリット
+- It is premised for perfect code ... It is a prerequisite not to make mistakes
+- You have to investigate mistakes - you can also run hundreds of checks every day, or multiple times a day
+- Catch = 22 UPDATE ... Sometimes you have to change parent and child at the same time. It is impossible to execute two different update processes simultaneously. Even when you want to avoid this you can solve by using a foreign key. (Cascade update: declare ON UPDATE, ON DELETE clause for foreign key constraint)
 
-- 完璧なコードを前提...ミスをしないようするということが前提になる
-- ミスを調べなければならない...数百ものチェックを毎日、あるいは1日に複数回実行しなくてはならないことにもなり得る
-- キャッチ=22なUPDATE...親と子を同時に変更しなければならない場合が生じる。2つの異なる更新処理を同時に実行することは不可能。これを避けたい場合にも外部キーを用いて解決できる。(カスケード更新: 外部キー制約にON UPDATE,ON DELETE句を宣言)
+### When we can use anti-pattern
 
-### アンチパターンを用いてもいい場合
+When using DB products that do not support foreign key constraints. (MyISAM's MyISAM storage engine and SQLite less than version 3.6.19)
 
-外部キー制約をサポートしていないDB製品を使用する場合。(MySQLのMyISAMストレージエンジンやバージョン3.6.19未満のSQLite)
+## ⑤EAV(Entity · Attribute · Value)
 
-## ⑤EAV(エンティティ・アトリビュート・バリュー)
+In the case of grouping by date, there are the following assumptions.
 
-日付でグルーピングするような場合、以下の前提がある。
+- The values are stored in the same column
+- Can compare values
 
-- 値が同じ列に格納されている
-- 値を比較できる
+It is not easy to compare if the date format is different or data is stored in a different column.
 
-日付のフォーマットが異なったり、違うカラムにデータが保存されていると簡単には比較できない。
+An anti-pattern (ex: attr_name, attr_value) to use a general-purpose attribute table
 
-汎用的な属性テーブルを使用するというアンチパターン(ex: attr_name, attr_value)
+### Demerit
 
-### デメリット
+- We can not set mandatory attribute
+- We can not use data type
+- We can not enforce referential integrity
+- We must complement the attribute name
+- We have to rebuild the line
 
-- 必須属性を設定できない
-- データ型を使えない
-- 参照整合性を強制できない
-- 属性名を補わなければならない
-- 行を再構築しなければならない
+### When we can use anti-pattern
 
-### アンチパターンを用いてもいい場合
+Because many of the advantages of relational databases are lost, there is little reason to justify EAV.
+*** Nonrelational ** If you need data management, you should use nonrelational techniques.
 
-リレーショナルデータベースの多くの長所が失われてしまうため、EAVを正当化する理由は少ない。
-***非リレーショナル*** なデータ管理が必要なら非リレーショナルな技術を使用するべき。
+- Berkeley DB ... DBLibrary of key / value expressions
+- Cassandra ... Column-oriented distributed DB developed on Facebook
+- CouchDB ... Document Oriented DB. Store distributed key / value and encode value in JSON format
+- Hadoop / HBase ... An open source distributed DB that implements Google's MapReduce algorithm.
+- MongoDB ... Document-oriented DB similar to CouchDB
+- Redis ... Document oriented in-memory DB
+- Tokyo Cabinet ... A data store of key / value type that supports POSIX DBM, GNU GDBM, Berkeley DB and so on.
 
-- Berkeley DB...key/value式のDBLibrary
-- Cassandra...Facebookで開発された列指向の分散DB
-- CouchDB...ドキュメント指向DB。分散型のkey/valueを格納し値をJSON形式でencode
-- Hadoop/HBase...GoogleのMapReduceアルゴリズムを実装したオープンソース分散DB。
-- MongoDB...CouchDBと類似したドキュメント指向のDB
-- Redis...ドキュメント指向のインメモリーDB
-- Tokyo Cabinet...key/value型のデータストアでPOSIX DBM, GNU GDBM,Berkeley DBなどに対応している。
+*** EAV solution ***
 
-***EAVの解決策***
+- Single table inheritance
+- Concrete table inheritance
+- class table inheritance
 
-- シングルテーブル継承
-- 具象テーブル継承
-- クラステーブル継承
+## ⑥Polymorphic associations
 
+If there are two similar tables
 
-## ⑥ポリモーフィック関連
+An anti-pattern that uses a dual-purpose foreign key
 
-2つの類似したテーブルが存在する場合
+- polymorphic associations
+- promiscuous association
 
-二重目的の外部キーを使用するというアンチパターン
+Multiple tables can be referenced.
 
-- ポリモーフィック関連(polymorphic associations)
-- プロミスキャス・アソシエーション(promiscuous association: 無差別な関連)
+### Demerit
 
-複数のテーブルを参照できる。
+- We can not define referential integrity constraint ... In this case, in addition to a foreign key such as `issue_id`, a column for association such as` issue_type` is required. In this case foreign key declaration for `issue_id` can not be done. For a foreign key, only one table has to be specified.
+- It may also be necessary to execute queries with outer joins of both parent tables
+- Non-object oriented
 
-### デメリット
+### When we can use anti-pattern
 
+Avoid polymorphic-related use whenever possible and use foreign key constraints to guarantee referential integrity.
+When using polymorphic association it relies heavily on application code, not metadata.
+When using an ORM framework such as Hibernate, there are occasions when it is necessary to use this anti-pattern.
+We encapsulate polymorphic-specific application logic to maintain referential integrity, thereby reducing the risk of adopting polymorphic-related applications.
 
-- 参照整合性制約を定義できない...この場合、 `issue_id` のような外部キーに加えて `issue_type` といった関連付けのためのカラムが必要になる。この場合 `issue_id` のための外部キー宣言ができない。外部キーではテーブルを1つのみ指定しなければならない。
-- 両方の親テーブルを外部結合したクエリの実行が必要になることも
-- 非オブジェクト指向
+## ⑦Multicolumn Attribute
 
-### アンチパターンを用いてもいい場合
+A problem of how to store it if there are multiple values in an attribute that seems to belong to the same table as Jay Walk.
+You want to add a tagging function to classify bugs in the bug database.
 
-なるべくポリモーフィック関連の使用は避けて外部キー制約を用いて参照整合性を保証するようにする。
-ポリモーフィック関連を使用するとメタデータではなくアプリケーションコードに過度に依存してしまう。
-HibernateなどのORMフレームワークを用いる場合はこのアンチパターンを使わざるを得ないときがある。
-ポリモーフィック関連固有のアプリケーションロジックをカプセル化して参照整合性を維持することでポリモーフィック関連の採用によるリスクを低減させている。
+An anti-pattern that defines multiple columns.
+A pattern that adds columns rather than storing clothes values in a single column separated by commas.
 
-## ⑦マルチカラムアトリビュート
+### Demerit
 
-ジェイウォークと同じ1つのテーブルに属するべきだと思える属性に複数の値がある場合、それをどう格納するかという問題。
-バグデータベースに、バグを分類するためのタグ付け機能を追加したい場合。
+- Searching for values ... troublesome
+- Adding and deleting values ... Requires complex SQL
+- Uniqueness guarantee ... possibility that the same value is stored in multiple columns
+- Processing of incrementing values ... Extension required according to the maximum number of tags
 
-複数の列を定義するというアンチパターン。
-服数値をカンマ区切りで1列に格納するのではなく、列を追加するパターン。
+### When we can use anti-pattern
 
-### デメリット
+When you can limit the choices of attributes.
 
-- 値の検索...手間がかかる
-- 値の追加と削除...複雑なSQLが必要
-- 一意性の保証...複数の列に同じ値が格納される可能性
-- 増加する値の処理...タグ数の最大値に応じて拡張が必要
+## ⑧Metadata Triple
 
-### アンチパターンを用いてもいい場合
+An anti pattern that copies tables and columns
 
-属性の選択肢を限定できる場合。
+- To divide a table with many rows into multiple tables (naming the table based on distinguishable data values of a certain attribute of a table)
+- To divide the column into multiple columns (naming the columns based on distinguishable values of other attributes)
 
-## ⑧メタデータトリブル(メタデータ大増殖)
+### Demerit
 
-テーブルや列をコピーするというアンチパターン
+- Propagation of the table ... You may have to create a new metadata object for the new data
+- Data consistency management ... need to prevent forgetting to correct the value of the CHECK constraint
+- Data synchronization
+- Uniqueness assurance
+- Query execution across tables
+- Synchronize metadata
+- Referential integrity management
+- Identification of metadata tributary columns
 
-- 行数の多いテーブルを、複数のテーブルに分割する(あるテーブルの属性の区別しやすいデータ値に基づいてテーブルを命名する)
-- 列を複数列に分割する(別の属性の区別しやすい値に基づいて列を命名する)
+### When we can use anti-pattern
 
-### デメリット
+An archive that separates past data from the latest data
+The need to execute queries on historical data is greatly reduced
 
-- テーブルの増殖...新しいデータのために新たなメタデータオブジェクトを作成しなければならない場合がある
-- データの整合性の管理...CHECK制約の値の修正し忘れを防ぐ必要性
-- データの同期
-- 一意性の保証
-- テーブルをまたいだクエリ実行
-- メタデータの同期
-- 参照整合性の管理
-- メタデータトリブル列の特定
+***Solution***
 
-### アンチパターンを用いてもいい場合
+Perform partitioning and normalization
 
-過去データを最新のデータから分離するようなアーカイブ
-過去データに対してクエリを実行する必要性は大幅に低下する
-
-***解決策***
-
-パーティショニングと正規化を行う
-
-- 水平パーティショニング
-- シャーディング
-- 垂直パーティショニング
+- Horizontal partitioning
+- Sharding
+- Vertical partitioning
