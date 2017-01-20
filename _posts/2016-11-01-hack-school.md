@@ -1,132 +1,120 @@
 ---
 layout: post
-title:  "ハッカーの学校 解説編で出てきた用語一部抜粋"
+title:  "Hacker's school - Partial excerpt from the explanation section"
 date:   2016-11-01 12:00:00 +0900
 categories: Development
 ---
 
-本日はハッカーの学校を読んでみたので、
-簡単に自分の中で整理したいと思います。
+Today, I'd like to explain some words from Hacker's school.
 
-まずは基本的な用語の整理
+Let's start with basic terms.
 
-- プライベートIP...LAN内で割り当てるためのIP
-- グローバルアドレスIP...インターネット場で唯一割り当てられるIP
-- ループバックアドレス...自分自身を示す仮想的なアドレス(通常:127.0.0.1 localhost)
-- ブロードキャストアドレス...当該ネットワークに所属するホスト全体 ホスト部を全部1にしたアドレス(192.168.1.0のホストアドレスが下位8ビットの場合はブロードキャストアドレスは192.168.1.255)
-- CIDR...クラスレスアドレッシング、ネットワークアドレスを任意の長さに設定できる仕組み
+- Private IP ... IP for allocation within the LAN
+- Global address IP ... IP assigned in the Internet field
+- Loop back address ... A virtual address indicating itself (normally: 127.0.0.1 localhost)
+- Broadcast address ... An address obtained by assigning all host hosts belonging to the relevant network to 1 (if the host address of 192.168.1.0 is the lower 8 bits, the broadcast address is 192.168.1.255)
+- CIDR ... Classless addressing, how you can set the network address to any length
+- Subnet mask ... A 32-bit number that defines how many bits from the beginning of the IP address to use for the network address
 
-ネットワークアドレスとホストアドレスについて
+For example, if the subnet mask is a binary number "11111111 11111111 11111111 00000000" (decimal number "255.255.255.0"),
+the upper 24 bits become the network address and the lower 8 bits become the host address.
+It is written as "198.168.10.0 / 24" together with the network address, or simply as "/ 24".
+The latter notation is called CIDR notation.
 
-=> [ネットワークアドレスとホストアドレス](http://www.itbook.info/study/p54.html)
+## Why manage MAC addresses in network management
 
-- サブネットマスク...IPアドレスの先頭から何ビットをネットワークアドレスに使用するかを定義する32ビットの数値
+By checking the vendor from the OUI of the MAC address and identifying the device,
+it is possible to confirm whether or not the network management unit does not use the network device unknown by the network management unit without permission.
+Since it is troublesome to connect an individual's PC inside the LAN without permission,
+refuse connection from other than the terminal having the MAC address registered by MAC address filtering.
 
-例えばサブネットマスクが2進数で「11111111 11111111 11111111 00000000」(10進数で「255.255.255.0」)なら
-上位24ビットがネットワークアドレス、下位8ビットがホストアドレスになる。
-これをネットワークアドレスとともに「198.168.10.0/24」と表記したり、単に「/24」のように表記する。
-後者の表記方はCIDR記法と呼ぶ。
+## Why do I need an IP address and MAC address in TCP / IP communication?
 
-## ネットワーク管理でMACアドレスを管理する理由
+MAC address does not have the concept of network.
+When only IP address is used, no allocation of address is done at the data link layer at all,
+so the OS will judge whether it is addressed to itself for all communication flowing through the physical network, which increases the load.
 
-MACアドレスのOUIからベンダーを調べて、機器を特定すれば
-ネットワーク管理部が把握していないネットワーク機器を勝手に使用していないかどうか確認できる。
-勝手にLAN内に個人のPCを接続されては困るのでMACアドレスフィルタリングで登録したMACアドレスをもつ端末以外からの接続を拒否する。
+## Address resolution
 
-## TCP/IP通信でIPアドレスとMACアドレスが必要な理由
+In order to communicate with TCP / IP, it is sufficient if there is an IP address and a MAC address.
+Once the domain name is known,
+the IP address can be identified from the DNS,
+so it is only necessary to have a mechanism to derive the MAC address from the IP address.
 
-MACアドレスはネットワークの概念を持っていない。
-IPアドレスだけの使用ではデータリンク層でアドレスの割り当てをまったく行わないということになるため、
-OSが物理ネットワークを流れるすべての通信について自分宛てかどうかを判断することになり、
-負荷が高くなる。
+Address resolution should lead the other from either the IP address or the MAC address.
+Generally, however, from the above circumstances, it means to derive an IP address from the MAC address.
 
-## アドレス解決
+There are three major categories of methods.
 
-TCP/IPで通信するためにはIPアドレスとMACアドレスがあれば良い。
-ドメイン名がわかればそこからIPアドレスはDNSで判別できるので、
-IPアドレスからMACアドレスを導く仕組みがあれば良い。
+- Table lookup
+- Calculate physical address from protocol address
+- Message Exchange
 
-アドレス解決はIPアドレス、MACアドレスどちらか一方からもう一方を導くこと。
-ただ、一般的には上記の事情からMACアドレスからIPアドレスを導くことを指す。
+# Communication of communication in the network field
 
-方法としては以下の3つに大別できる。
+- TCP ... Separate and exchange long data and restore it on the receiving side on the receiving side. even if an error occurs while carrying data, it can be repaired or retransmitted
+To do
+- UDP ... Simple protocol without recovery function of error. Therefore, the burden on the processor which processes the communication is light, and the operation speeds up because the amount of data flowing through the network is small.
 
-- テーブルルックアップ
-- プロトコルアドレスから物理アドレスを算出
-- メッセージ交換
+## UDP client behavior
 
-## ネットワーク場における通信のやりとり
+- Name resolution ... To acquire IP from server name
+- Create socket object · The OS has a table for managing the communication state and one record corresponds to one socket (program name being communicated, type of protocol, communication status etc)
+- Transmission of data ... Check transmission contents, route search, find MAC address using ARP, create / send packet
+- Receive response data
 
-- TCP...長いデータを分割してやりとり、分割したものを受け取った側で元に戻す データを運ぶ途中でエラーが起きてもそれを修復したり再送
-したりする
-- UDP...エラーの回復機能をもたない簡便なプロトコル そのため通信の処理を行うプロセッサの負担が軽く、ネットワークを流れるデータ量が少ないため動作が早くなる。
-
-
-## UDPクライアントの動作
-
-- 名前解決...サーバー名からIP取得
-- ソケットオ・ブジェクトの作成...OSは通信状態を管理するテーブルをもちその1レコードが1ソケットに対応する(通信しているプログラム名やプロトコルの種類、通信状態など)
-- データの送信...送信内容のチェック、経路探索、ARPを用いてMACアドレスの割り出し、パケットの作成/送信
-- レスポンスデータの受信
-
-ざっくりな流れはTCPも同じだがその内容は異なる。
-
-- [TCPとUDPの比較](http://gihyo.jp/admin/serial/01/net_prac_tech/0007)
-- [ARP(Address Resolution Protocol)、RARP(Reverse ARP)とは](http://www.infraexpert.com/study/tcpip2.html)
+The rough flow is the same for TCP, but its contents are different.
 
 
 ## NIC
 
-NIC...Network Internet Card はデジタルデータを電気信号に変えて送出したり、その逆に電気信号をデジタルデータに変換してコンピュータに取り込んだりするためのカードです。
-NICはLANの接続に利用するため、LANカードとも呼ばれる。
+NIC ... The Network Internet Card is a card for converting digital data into electric signals and sending it, and vice versa to convert electric signals into digital data and import them into a computer.
+Because NIC is used for LAN connection, it is also called LAN card.
 
-## OSI参照モデル
+## OSI Model
 
-- [OSI参照モデル](http://miyata.gotdns.com/net/OSI..htm)
-- [OSI参照モデルとネットワーク機器](http://old.active-sita.com/32_benkyo/ren_01_pc-net-2/pc-net-2.html)
+[https://en.wikipedia.org/wiki/OSI_model](https://en.wikipedia.org/wiki/OSI_model)
 
 ## ICMP
 
-ICMP...ネットワーク上の接続機器の状態を伝えるための通信プロトコル
-IPパケットのエラー通知やIPネットワークの状態などを確認するIPネットワークの診断用として使用される。
+ICMP ... communication protocol for communicating the state of connected devices on the network
+It is used for diagnosis of IP network for checking error notification of IP packet and the state of IP network.
 
-[主なICMPメッセージ](http://blog.negabaro.com/4903.html)
+[ICMP Message Types](http://www.informit.com/articles/article.aspx?p=26557&seqNum=5)
 
-## DNS名前空間
+## DNS namespace
 
-DNSは名前をツリー構造で管理する。
-ノードには名前が割り当てられ、ツリー構造全体をDNS名前空間(ドメイン名空間)と呼ぶ。
-ドメイン名空間の部分木がドメインになる。
-DNS名前空間の木の深さは最大で127まで許されている。
+DNS manages names in a tree structure.
+Names are assigned to nodes, and the entire tree structure is called DNS namespace (domain name space).
+The subtree of domain name space becomes domain.
+The depth of the DNS namespace tree is allowed up to 127.
 
-ルートの直下のドメインは ***TLD(Top Level Domain)*** と呼ばれる。
+The domain immediately under the root is called *** TLD (Top Level Domain) ***.
 
-## リソースレコード
+## Resource record
 
-ドメインは、ドメインに関連づけられたリソースレコード(資源レコード)の集合をもつ。
+A domain has a set of resource records (resource records) associated with domains.
+Representative
 
-代表的なもの
-
-
-| タイプ | 値 | 意味  |
+| Type | value | meaning |
 | ------ | ------ | ------ |
-|  A  |  1  |   ホストのIPアドレス  |
-|  NS  |  2  |   ゾーンに権威を持つネームサーバー(DNSサーバー)  |
-|  CNAME  |  5  |  押すとの別名に対応するドメインの正式名  |
-|  SOA  |  6  |  ゾーン内の権限の起点  |
-|  WKS  |  11 |  ウェルノウンサービス  |
-|  PTR  |  12  | IPアドレスの逆引き用のポインタ   |
-|  HINFO  |  13  |  ホストに関する追加情報(CPUとOSのタイプ)  |
-|  MINFO  |  14  |  メーリングリストを担当するメールボックス  |
-|  MX  |  15  |  メールサーバー(Mail Exchange)  |
-|  TXT  | 16   |  DNSが解釈しない単なるASCII文字列  |
-|  SIG  | 24   |  セキュリティの署名  |
-|  KEY  | 25   |  セキュリティの鍵  |
-|  GPOST  |  27  |  地理的な位置  |
-|  AAAA  |  28  |  ホストのIPアドレス(IPv6)  |
-|  NXT  |  30  |  次のドメイン  |
-|  SRV  |  33  |  サーバーの選択  |
-|  *  |  255  |  すべてのレコードの選択  |
+| A | 1 | Host IP address |
+| NS | 2 | name server authoritative for zone (DNS server) |
+| CNAME | 5 | Press the canonical name of the domain corresponding to the alias |
+| SOA | 6 | origin of authority within zone |
+| WKS | 11 | Well known service |
+| PTR | 12 | pointer for reverse lookup of IP address |
+| HINFO | 13 | Additional information on host (CPU and OS type) |
+| MINFO | 14 | mailbox in charge of mailing list |
+| MX | 15 | Mail server (Mail Exchange) |
+| TXT | 16 | Simple ASCII string not interpreted by DNS |
+| SIG | 24 | Security signature |
+| KEY | 25 | Security key |
+| GPOST | 27 | Geographic location |
+| AAAA | 28 | Host IP address (IPv6) |
+| NXT | 30 | Next Domain |
+| SRV | 33 | Server Selection |
+| * | 255 | Select all records |
 
 
 

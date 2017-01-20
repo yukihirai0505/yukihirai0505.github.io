@@ -1,50 +1,55 @@
 ---
 layout: post
-title:  "ハッカーの学校 実践編で出てきた用語一部抜粋"
+title:  "Hacker's school - Partial excerpt from some practical examples"
 date:   2016-11-02 12:00:00 +0900
 categories: Development
 ---
 
-本日もハッカーの学校を読んだので
-出てきた用語など一部抜粋してまとめてみます。
+Today, I'd like to explain some words from Hacker's school.
 
-## ネットワークのハッキング
+## Network hacking
 
-ハッキングといえば
+Speaking of hacking, the following are examples.
 
-- サーバー侵入
-- 遠隔操作
-- WEBアプリのハッキング
-- ネットワークの盗聴
-- サービス不能攻撃
+- Server intrusion
+- Remote control
+- Hacking web applications
+- Eavesdropping on the network
+- Denial of service attack
 
-などがあげられるが
-ハッカーの学校では ***サーバー侵入*** に絞って解説している。
- 
-サーバ侵入する上で成功させるためには管理者権限を手にすることができれば
-保存された個人情報や機密情報
-どんなファイルでも自由自在にアクセスできる。
-また、さらなる内部のサーバーに侵入、外部のサーバーに侵入するための踏み台として理由するなど
-あらゆる行為が可能になる。
+At a hacker's school, I explain it focusing on *** server intrusions ***.
+ 
+If you can gain administrator privileges in order to succeed on intruding the server, you can freely access any file such as saved personal information or confidential information.
+It also allows any action, such as invading further internal servers, as a reason for stepping into an external server.
 
-## サーバー侵入のプロセス
+Speaking of hacking, the following are examples.
 
-- ターゲッティング...公式のWebサイト、設定ミスによって公開されているファイルの有無、ネットワークのマッピング、アプリケーションバナーによるバージョンの特定
-- スキャン...Pingスイープ、共有スキャン、OS特定、ネットワークリソースの列挙、ユーザーの列挙
-- 間接的アタック...ターゲットのサーバーが存在する部屋に侵入すればネットワーク経由でシステムを掌握するより容易 ソーシャルエンジニアリングにより人からパスワードを聞き出す、遠隔操作のプログラムを感染させたり Sniffingによりネットワークを盗聴したりすること
-- 直接的アタック...直接ターゲットサーバーを攻撃 ターゲットのサーバ上にシェルアカウントを持っている場合は管理者権限奪取を目標 Exploit
-- 後片付け...セキュリティ強化を遅らせるため、ログを消すと怪しいので改竄するのが理想 また毎回同じ攻撃をしかけるのは手間がかかるのでバックドアという裏口を設置しておき、次回からの侵入を簡単に行えるようにする。バックドアを使用すると踏み台にすることも容易になる。 
-- 宝探し...企業のサーバーであれば社外秘の情報(受託情報、個人情報、未発表の自社製品情報など)を発見できるかもしれない。共有サーバー、メールサーバー、DBサーバーは可能性が高い。またソフトウェアを開発していればリポジトリからソースファイルを取得することもできる。
+- Server intrusion
+- Remote control
+- Hacking web applications
+- Eavesdropping on the network
+- Denial of service attack
+
+At a hacker's school, I explain it focusing on *** server intrusions ***.
+ 
+If you can gain administrator privileges in order to succeed on intruding the server, you can freely access any file such as saved personal information or confidential information.
+It also allows any action, such as invading further internal servers, as a reason for stepping into an external server.
+
+## Server intrusion process
+
+- Targeting ... Official Web site, existence of files published by misconfiguration, mapping of networks, identification of version by application banner
+- Scan ... Ping sweep, shared scan, OS specific, enumerate network resources, enumerate users
+- Indirect attack ... If you intrude into the room where the target server exists, it is easier than grasping the system via the network. Listen for passwords from people by social engineering, infect remote controlled programs, sniff the network by Sniffing
+- Direct attack ... attack directly target server. If you have a shell account on the target server, you aim to take administrator privileges. Exploit
+- Cleaning up ... In order to delay security enhancement, it is doubtful to erase the log, so it is ideal to tamper with it. Since it is troublesome to make the same attack every time, set up a backdoor called a backdoor, easy to invade from the next time . Using a backdoor makes it easy to stepping on.
+- Treasure hunting ... If it is a server of a company, it may be able to discover information of confidentiality (information on consignment, personal information, unpublished in-house product information etc.). Shared servers, mail servers, DB servers are likely. If you are developing software you can also get the source file from the repository.
 
 ## Kali Linux
 
-Kali Linuxはペネストレーションに特化したLinuxでセキュリティやアタックに関するツールが標準でインストールされている。
-昔のBackTrack LinuxというOSの後継バージョン。
+Kali Linux is a Linux specialized in penestation and security and attack tools are installed as standard by Linux.
+A successor version of the old BackTrack Linux OS.
 
-Kaliはヒンズー教の破壊神のこと。
-
-[インストール手順](http://qiita.com/mrnk/items/3ac482dc9aaf47176f30)
-[Kali Linux 2.0 を Virtualbox（Mac）に構築する](http://qiita.com/Okusan818/items/77e56f9747a20f07b91a)
+Kali is about Hindu destruction god.
 
 ```
 vagrant init starflame/kali2_linux4.0.0_amd64
@@ -67,174 +72,167 @@ vagrant up --provider virtualbox
 
 ## Top10 Security Tools
 
-| ツール名 | 概要 |
+| Tool name | Overview |
 | ------ | ------ |
-|  aircrack-ng  |  無線LAN向けのパスワードクラッカー  |
-|  burpsuite  |  Local Proxy(クライアントとサーバー間のパケットを変更できる)  |
-|  hydra  |  高機能なオンラインパスワードクラッカー  |
-|  john  |  高機能なオフラインパスワードクラッカー  |
-|  maltego  |  ソーシャルエンジニアリング支援ツール  |
-|  metasploit framework  |  Exploitの作成・実行を行うフレームワーク  |
-|  nmap  |  高機能なポートスキャナー  |
-|  owasp-zap  |  WEBサイトの脆弱性を診断するためのペネストレーションテストツール  |
-|  sqlmap  |  SQLインジェクションの脆弱性をテストするツール  |
-|  wireshark  |  有名なパケットキャプチャー  |
+| Aircrack-ng | password cracker for wireless LAN |
+| Burpsuite | Local Proxy (Can change packet between client and server) |
+| Hydra | High performance online password cracker |
+| John | High performance Offline Password Cracker |
+| Maltego | Social engineering support tool |
+| Metasploit framework | Framework for creating and executing Exploit |
+| Nmap | High performance port scanner |
+| Owasp - zap | Penestration test tool for diagnosing vulnerabilities on web sites |
+| Sqlmap | Tools for testing SQL injection vulnerabilities |
+| Wireshark | famous packet capture |
 
-## 光海底ケーブル
+## Optical submarine cable
 
-各国をまたがる長距離の有線ケーブル。
-全世界の海域に施設されていて、その総延長は100万kmを超える。
-インターネットの生命線。
-毎年数十%の割合で増加。
+Long distance wired cable across countries.
+It is located in the waters of the whole world and its total extension exceeds 1 million km.
+Life line of the Internet.
+Increase at a rate of several tens of percent each year.
 
-もし主要幹線にあたる海底ケーブルが故障したり切断されたりすると場合によっては一部の国が完全にインターネットから遮断される可能性がある。
+If a submarine cable corresponding to the main trunk fails or is broken, in some cases some countries may be completely blocked from the Internet.
 
 ## Ping
 
-指定したホストがネットワーク上に存在するかどうかを判定することができる。
-PingはICMPプロトコルを利用して実現化している。
+It is possible to determine whether or not the specified host exists on the network.
+Ping is realized using the ICMP protocol.
 
-エコー要求メッセージ(タイプ8)を送信し
-ICMPエコー応答メッセージ(タイプ0)が返ってくれば到達可能。
-それ以外の時は到達不能。
+It can be reached if an echo request message (type 8) is transmitted and an ICMP echo response message (type 0) is returned.
+Other times it is unreachable.
 
 ## traceroute
 
-tracerouteは指定したホストまでの経路を調べるプログラム。
-ネットワーク障害が発生した際にどのルーターで問題が発生しているのかを特定するために使用されたりする。
+Traceroute is a program to check the route to the specified host.
+Or it is used to identify at which router a problem occurs when a network failure occurs.
 
 ## nslookup
 
-nslookup(name server lookup)はDNSリゾルバのプログラム。
-DNSサーバーからの返答を画面に表示する。
+Nslookup (name server lookup) is a DNS resolver program.
+It displays the response from the DNS server on the screen.
 
 ## whois
 
-whoisとは登録されているサーバー情報を確認すること。
-情報はwhoisサーバーに存在していて、そのDBにアクセスすることで
-サーバーの管理者の情報を得ることができる。
+Whois is to check the registered server information.
+Information exists on the whois server, and by accessing that DB you can get information on the server administrator.
 
 ## host
 
-hostはDNSサーバーで名前解決する情報について問い合わせをするコマンド。
-nslookupやdigと同様にDNSに関する各種の調査やデバッグに使用できる。
+Host is a command to inquire about information to be resolved on the DNS server.
+Like nslookup and dig, it can be used for various investigations and debugging on DNS.
 
 ## Nmap
 
-高機能ポートスキャナー。
-ステルススキャン、広域スキャン、フィンガープリンチングと呼ばれるOSを推測する機能を備えている。
-マトリックスやダイ・ハード4.0、バトル・ロワイアルなど、ハッキング場面によく登場することでも有名。
+High performance port scanner.
+Stealth scan, wide area scan, finger printing, and so on.
+Matrix, Da · Hard 4.0, Battle · Royale, etc. It is also famous for appearing frequently in hacking scenes.
 
-KaliにはNmapはインストール済み。
-
-[Mac に Nmap をインストールする](https://macperson.net/mac-nmap/)
+Nmap is already installed on Kali.
 
 ## Zenmap
 
-ZenmapはNmapのGUIフロントエンド。
-
-[Mac のポートスキャンツール Zenmap をインストールして使ってみる](https://www.websec-room.com/2014/02/08/1806)
+Zenmap is GUI front end for Nmap.
 
 ## Netcraft
 
-NetcraftのWebサイトにおいてWebServer Searchを行うことで
-指定したWebサーバーの情報を調べることができる。
-httpdの種類とそのバージョン、指定したWebサーバーがどのくらいの期間稼働し続けているかといった情報。
+By doing WebServer Search on the Netcraft website
+You can check the information on the specified web server.
+Information on the type and version of httpd, and how long the specified Web server is running.
 
 ## Sniffing
 
-SniffingとはLAN内でやりとりされるパケットを取得すること。
-ネットワークの盗聴行為のことを指す。
+Sniffing is to acquire packets exchanged in the LAN.
+It refers to the wiretap act of the network.
 
 ## tcpdump
 
-tcpdumpはCUIで動作するパケットキャプチャ。
+cpdump is a packet capture that works with CUI.
 
 ## Wireshark
 
-パケットアナライザ。
+Packet Analyzer.
 
 ## Cain & Abel
 
-Cain & Abel はパスワードクラッカー。Windowsで動作する。
+Cain & Abel is a password cracker. Works on Windows.
 
 ## Fiddler
 
-Fiddlerはフリーで使用できるLocal Proxyの一種。
-ブラウザからのHTTP通信が、Fiddlerを経由しての通信になり
-HTTPリクエストやHTTPレスポンスの詳細を確認したり、リクエストの内容を改変したりできる。
-Windowsの.NET環境で動作する。
+Fiddler is a type of Local Proxy that can be used free.
+HTTP communication from the browser becomes communication via Fiddler, it is possible to check the details of HTTP request and HTTP response, and to modify the contents of the request.
+It works in .NET environment of Windows.
 
-## 辞書ファイル
+## Dictionary file
 
-辞書ファイルとは1行に1単語を記述したテキストファイルのこと。
-パスワード解析において、辞書式アタックを行う際に使用する。
-つまりパスワード候補を列挙したテキストファイルのこと。
+A dictionary file is a text file describing one word per line.
+In password analysis, it is used for lexicographic attack.
+That is, it is a text file that enumerates password candidates.
 
-よく使われるパスワードの辞書ファイルをネットからDLして使用することもある。
+Sometimes DL Dictionary of Frequently Used Password Dictionary File from Net
 
-## crunh
+## crunch
 
-crunchは辞書ファイルを生成するためのソフトウェア。
-Unixで動作してKaliにはデフォルトでインストールされている。
+Crunch is software for generating dictionary files.
+It runs on Unix and is installed by default on Kali.
 
 ## THC-Hydra
 
-THC-HydraはThe Hacker's Choiceが開発しているオンラインパスワードクラッカー。
-Linuxで動作する。
+THC-Hydra is an online password cracker developed by The Hacker's Choice.
+It runs on Linux.
 
 ## Metasploit
 
-MetasploitはExploitの作成や実行するためのフレームワーク。
-セキュリティの世界ではペネストレーションツールとして使用される。
+Metasploit is a framework for creating and executing Exploit.
+It is used as a pen nation tool in the security world.
 
-## w まだは who
+## w or who
 
-wコマンドまたはwhoコマンドは現在ログインしているユーザーを確認するUnixコマンド。
-wコマンドはwhoコマンドと同じ区ログイン中のユーザー情報を表示するがwhoコマンドより詳しい情報を表示する。
+The w command or the who command is a Unix command to check the currently logged in user.
+The w command displays user information while logged in the same section as the who command but displays detailed information from the who command.
 
-## Unixシステムにおけるログ消し
+## Log deletion on Unix system
 
-簡単にログを削除してくれるプログラムは昔から存在している。
-Packet Stormにはログ消しツールのカテゴリーがあるので、最新のプログラムを探すことができる。
+Programs that easily delete logs have existed from long ago.
+Packet Storm has a category of log deletion tool,
+so you can search for the latest program.
 
-## ファイル時刻情報の改竄
+## Falsification of file time information
 
-専用ツールを使用すれば簡単に時刻情報を改竄することができる。
-ただ、ファイルシステムを理解するには手動でやってみるのが早い。
+By using a special tool, it is possible to easily alter the time information.
+However, in order to understand the file system, it is faster to do it manually.
 
-- ファイルの時刻情報...3種類ある(atime, ctime, mtime)
+- Time information of the file ... There are 3 types (atime, ctime, mtime)
 
-ファイルシステムによってはcrtimeがある。
+Some file systems have crtime.
 
-- atime...最終参照時刻
-- ctime...最終状態変更時刻
-- mtime...最終修正時刻
-- crtime...作成時刻
+- atime ... last reference time
+- ctime ... last state change time
+- mtime ... last modification time
+- crtime ... creation time
 
-atimeとmtimeの改竄の結果、管理者に不正なファイルの存在を気づかせない。
+As a result of tampering atime and mtime, do not let the administrator notice the existence of illegal files.
 
 ```
-$ ls -u  #atimeを表示
-$ ls -cl #mtimeを表示
+$ ls -u  #it shows atime
+$ ls -cl #it shows mtime
 $ touch test.txt
-$ touch -d "2014/9/11 00:11:22 pm" test.txt #atimeとmtimeの変更
-$ touch -a -d "2014/9/11 00:11:22 pm" test.txt #atimeのみ変更
-$ touch -m -d "2014/9/11 00:11:22 pm" test.txt #mtimeのみ変更
+$ touch -d "2014/9/11 00:11:22 pm" test.txt #it changes atime and mtime
+$ touch -a -d "2014/9/11 00:11:22 pm" test.txt #it changes only atime
+$ touch -m -d "2014/9/11 00:11:22 pm" test.txt #it changes only mtime
 ```
 
 ## Netcat
 
-NetcatはTCP・UDPを使用してデータを読み書きするためのツール
-サーバーとしてポートをlistenしたり、クライアントとして接続先にconnectしてデータを送信したりできる。
-ハッキングの世界ではバックドアとして利用されることもある。
+Netcat is a tool for reading and writing data using TCP / UDP.
+You can listen to a port as a server or connect to a connection as a client and send data.
+Sometimes it is used as a backdoor in the world of hacking.
 
 ## Cryptcat
 
-Cryptcatは暗号化通信を実現したNetcat。
-従来のNetcatと同様の構文で操作できるネットワークリスナー。
+Cryptcat realized encrypted communication Netcat.
+A network listener that can operate with the same syntax as conventional Netcat.
 
-## 最後に
+## Finally
 
-ハッカーの学校を読んで、
-ハッキングやセキュリティまわりで便利なツーツが多数あることがわかった。
+I read a hacker's school and found that there are many convenient toys around hacking and security.
