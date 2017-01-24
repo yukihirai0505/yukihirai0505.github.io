@@ -33,12 +33,10 @@
               <div class="module left">
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                   <ul id="menu" class="menu">
-                    <li id="menu-item-1847"
-                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-1847 {% if page.url == "/" %}active{% endif %}">
-                      <a title="HOME" href="{{site.baseurl}}">HOME</a>
+                    <li class="{% if page.url == "/" %}active{% endif %}">
+                      <a title="HOME" href="{{site.baseurl}}/">HOME</a>
                     </li>
-                    <li id="menu-item-1846"
-                        class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-703 current_page_item menu-item-1846 {% if page.url == "/about/" %}active{% endif %}">
+                    <li class="{% if page.url == "/about/" %}active{% endif %}">
                       <a title="About" href="{{site.baseurl}}/about/">About</a>
                     </li>
                     <!--
