@@ -29,28 +29,28 @@
               <i class="fa fa-bars"></i>
             </div>
 
-            <!--
             <div class="module-group right">
               <div class="module left">
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                   <ul id="menu" class="menu">
                     <li id="menu-item-1847"
-                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-1847">
-                      <a title="HOME" href="https://blog.yukihirai0505.com/">HOME</a>
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-1847 {% if page.url == "/" %}active{% endif %}">
+                      <a title="HOME" href="{{site.baseurl}}">HOME</a>
                     </li>
                     <li id="menu-item-1846"
-                        class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-703 current_page_item menu-item-1846 active">
-                      <a title="Diary" href="https://blog.yukihirai0505.com/blog/">Diary</a>
+                        class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-703 current_page_item menu-item-1846 {% if page.url == "/about/" %}active{% endif %}">
+                      <a title="About" href="{{site.baseurl}}/about/">About</a>
                     </li>
+                    <!--
                     <li id="menu-item-1858"
                         class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1858">
                       <a title="Tech Blog" href="https://yukihirai0505.github.io/">Tech Blog</a>
                     </li>
+                    -->
                   </ul>
                 </div>
               </div>
             </div>
-            -->
 
           </div>
         </div>
