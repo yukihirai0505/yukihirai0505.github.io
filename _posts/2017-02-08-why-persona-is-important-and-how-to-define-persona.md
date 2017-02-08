@@ -1,51 +1,74 @@
 ---
 layout: post
-title:  "When you want to recover quickly when the disk capacity is full"
-date:   2016-12-14 12:00:00 +0900
-categories: Development
+title:  "Why persona is important? How can we define persona?"
+date:   2017-02-08 19:00:00 +0900
+categories: Marketing
 ---
 
-In this case,
-when the disk capacity becomes full and the system is down, record about immediate actions.
+## Why persona is important?
 
-## When the disk capacity is full and the system goes down
+There are some different departments such as publicity, service development, sales, etc in a company.
+So it is difficult to have common concrete target image.
+As a result, the message we want to communicate most can not be transmitted to customers. 
 
-When the disk capacity becomes full, the system may go down.
-If this is a production environment it is highly urgent so I'd like to recover quickly.
+Therefore,
+it is the "persona" strategy to unify the marketing policy by sharing the representative customer profile "Persona" set in detail within the company. 
 
-This time I will describe the response of immediate recovery
-rather than solving the fundamental problem.
+Using the "Pareto's law" that can cover 80% of the needs by highlighting 20% typical user images,
+grasp the needs of the majority by grasping the detailed needs of individuals.
+It can be said to be a method aimed at.
 
-## Check which dir is full
+## How can we define persona?
 
-First of all, we should check which directory is using capacity with `du -sh` command.
+There are 9 questions to define persona.
 
-## Check the files in the target directory
+### 1. Who is a persona?
 
-Check the file in the target directory and check the contents if there is error.log etc.
-If there is a lot of logs expired with some error,
-restart the system once,
-save the target log to another server and delete it from the target server.
-And then, lighten the disk capacity as much as possible.
+- What kind of brand do clothes like?
+- What kind of brand do you like cosmetics?
+- What kind of brand do you prefer for daily necessities?
+- What kind of education have you received? (Academic background)
 
-## Precautions for system down
+### 2. What kind of job does persona have?
 
-- Install log rotation
-- Configure disk space alerts
+- What is your job? What titles are given?
+- How much are you earning?
+- When is your wallet tie loose?
 
-For AWS, you can set alert of disk capacity in CloudWatch with custom setting.
-The following article is helpful.
+### 3. What are the interests / hobbies other than Persona's job?
 
-- [Monitoring Memory and Disk Metrics for Amazon EC2 Linux Instances](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/mon-scripts.html)
+- What is your hobby?
+- Outside of work, what are you passionate about?
 
-If you run for the first time,
-it may be that some perl modules are missing and it may not work,
-so let's check the error log for proper installation.
+### 4. What will move a persona?
 
-Also, the `install Crypt :: SSLeay` test may not work,
-but it seems that you can set TEST to NO. ←
-I do not think so well. lol
+- What is the goal in life?
+- In my life, what role does my family have?
 
-[How to Force Install a Perl Module using CPAN](http://www.thegeekstuff.com/2013/06/cpan-force-install-perl-module)
+### 5. Who is important to a persona? Who is influencer? why?
 
-qt: `fforce install Net::SSLeay`
+- Who will be affected? Partners, children, parents, friends, bosses, colleagues, friends of social media, entertainers.
+- Is social media information related to purchase decision-making?
+
+### 6. What type of products do people purchase in the past?
+
+- What type of products are you purchasing? Who do you buy from? Approximately, how much do you buy per month, or one year?
+- Do you purchase goods to show off or consider long-term value?
+
+### 7. Which media do people use?
+
+- What information are you periodically seeking?
+- What kind of media channel do you use (TV, radio, magazines, newspaper, internet)?
+
+### 8. Which social network do persona participate in?
+
+- Is Persona a social media type that does not speak? Type to leave a comment? Or type positively posting content?
+- How long do you spend on social media in a day or a week?
+- Have you received past purchases influenced by social media? Does Persona share the items you bought with social media?
+
+### 9. Which device does the persona person use?
+
+- Does Persona use smart-phones? Do you own work and private smart phones separately?
+- Regularly, which application / function are you using?
+- What other devices are you using? Do you use computers (PC), tablets, game machines, E-readers?
+- What kind of devices are used in the car (if you have a car)?
