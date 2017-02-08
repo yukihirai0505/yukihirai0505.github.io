@@ -5,8 +5,6 @@ date:   2017-02-08 19:00:00 +0900
 categories: Marketing
 ---
 
-## Why persona is important?
-
 There are some different departments such as publicity, service development, sales, etc in a company.
 So it is difficult to have common concrete target image.
 As a result, the message we want to communicate most can not be transmitted to customers. 
