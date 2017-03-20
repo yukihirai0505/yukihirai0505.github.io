@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "When you want to recover quickly when the disk capacity is full"
+title:  "When you want to recover a problem that is disk capacity is full."
 date:   2016-12-14 12:00:00 +0900
 categories: Development
 ---

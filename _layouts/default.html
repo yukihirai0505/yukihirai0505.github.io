@@ -4,6 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="shortcut icon" type="image/png" href="/images/favicon.png">
   <link rel="stylesheet" id="shapely-bootstrap-css" href="{{site.baseurl}}/css/bootstrap.min.css?ver=4.7" type="text/css" media="all">
   <link rel="stylesheet" id="shapely-icons-css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" media="all">
   <link rel="stylesheet" id="shapely-fonts-css" href="//fonts.googleapis.com/css?family=Raleway%3A100%2C300%2C400%2C500%2C600%2C700%7COpen+Sans%3A400%2C500%2C600&#038;ver=4.7" type="text/css" media="all">
@@ -29,28 +30,26 @@
               <i class="fa fa-bars"></i>
             </div>
 
-            <!--
             <div class="module-group right">
               <div class="module left">
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                   <ul id="menu" class="menu">
-                    <li id="menu-item-1847"
-                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-1847">
-                      <a title="HOME" href="https://blog.yukihirai0505.com/">HOME</a>
+                    <li class="{% if page.url == "/" %}active{% endif %}">
+                      <a title="HOME" href="{{site.baseurl}}/">HOME</a>
                     </li>
-                    <li id="menu-item-1846"
-                        class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-703 current_page_item menu-item-1846 active">
-                      <a title="Diary" href="https://blog.yukihirai0505.com/blog/">Diary</a>
+                    <li class="{% if page.url == "/about/" %}active{% endif %}">
+                      <a title="About" href="{{site.baseurl}}/about/">About</a>
                     </li>
+                    <!--
                     <li id="menu-item-1858"
                         class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1858">
                       <a title="Tech Blog" href="https://yukihirai0505.github.io/">Tech Blog</a>
                     </li>
+                    -->
                   </ul>
                 </div>
               </div>
             </div>
-            -->
 
           </div>
         </div>
@@ -75,7 +74,21 @@
     <section class="content-area ">
       <div id="main" class="container" role="main">
         <div class="row">
-          {{ content }}
+          <div id="primary" class="col-md-9 mb-xs-24 side-right">
+            {{ content }}
+          </div>
+          <aside id="secondary" class="widget-area col-md-3 hidden-sm" role="complementary">
+            <section id="recent-posts-2" class="widget widget_recent_entries">
+              <h2 class="widget-title">Recent Posts</h2>
+              <ul>
+                {% for post in site.posts limit:5 %}
+                <li>
+                  <a href="{{ post.url }}">{{ post.title }}</a>
+                </li>
+                {% endfor %}
+              </ul>
+            </section>
+          </aside><!-- #secondary -->
         </div><!-- row -->
       </div><!-- #main -->
     </section><!-- section -->
