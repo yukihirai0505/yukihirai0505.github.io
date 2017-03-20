@@ -4,9 +4,6 @@ title: Privacy Policy
 permalink: /privacy/
 ---
 
-## Privacy Policy
-
-
 ### 1.Introduction
 
 We  ("we", "us", or "our"), believe your privacy is very important.
