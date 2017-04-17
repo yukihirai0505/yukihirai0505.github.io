@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Why persona is important? How can we define persona?"
+title:  "Osbourne checklist ~ the method of idea extraction ~"
 date:   2017-04-17 10:00:00 +0900
 categories: Marketing
 ---
