@@ -74,7 +74,7 @@ But I think that it is easy to understand if you think separating each one.
 This cursor saves the data contained in a table and loops the result of each record.
 It plays a role like a for statement.
 
-{% gist yukihirai0505/79b2a87d40976ec20853 %}
+{% gist yukihirai0505/a2e7f29068a05a5c5b1652e55fae1054  %}
 
 Like above program,
 I could create a table with all eventId in the column
